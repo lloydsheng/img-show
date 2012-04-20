@@ -93,7 +93,7 @@ const int kDefHotBlogNumPerPage = 50;
     }
     
     NSMutableDictionary* para = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [para setObject:@"3" forKey:@"type"];
+    [para setObject:@"1" forKey:@"type"];
     [para setObject:@"1" forKey:@"is_pic"];
     [para setObject:@"40" forKey:@"count"];
     [engine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil];
@@ -172,7 +172,7 @@ const int kDefHotBlogNumPerPage = 50;
 - (void) requestDataWithType:(TRequestType) requestType
 {
     NSMutableDictionary* para = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [para setObject:@"3" forKey:@"type"];
+    [para setObject:@"1" forKey:@"type"];
     [para setObject:@"1" forKey:@"is_pic"];
     [para setObject:@"40" forKey:@"count"];
     

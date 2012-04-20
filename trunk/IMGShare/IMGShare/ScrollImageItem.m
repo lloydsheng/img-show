@@ -9,6 +9,80 @@
 #import "ScrollImageItem.h"
 #import "UIImageView+WebCache.h"
 
+const int kImageWaitTag = 100;
+
+@implementation UIImageView (WebCache)
+
+- (void)startImgAnimating
+{
+    UIActivityIndicatorView* wait = nil;
+    NSArray* arr = [self subviews];
+    for (int index = 0; index < arr.count; index++)
+    {
+        UIView* item = [arr objectAtIndex: index];
+        if (item.tag == kImageWaitTag && [item isKindOfClass:[UIActivityIndicatorView class]])
+        {
+            wait = (UIActivityIndicatorView*)item;
+            break;
+        }
+    }
+    if (wait == nil) {
+        wait = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
+        wait.tag = kImageWaitTag;
+        [self addSubview:wait];
+    }
+    [wait startAnimating];
+    
+}
+- (void)stopImgAnimating
+{
+    NSArray* arr = [self subviews];
+    for (int index = 0; index < arr.count; index++)
+    {
+        UIView* item = [arr objectAtIndex: index];
+        if (item.tag == kImageWaitTag && [item isKindOfClass:[UIActivityIndicatorView class]])
+        {
+            [(UIActivityIndicatorView*)item stopAnimating];
+            break;
+        }
+    }
+}
+- (bool) isImgWaiting
+{
+    NSArray* arr = [self subviews];
+    for (int index = 0; index < arr.count; index++)
+    {
+        UIView* item = [arr objectAtIndex: index];
+        if (item.tag == kImageWaitTag && [item isKindOfClass:[UIActivityIndicatorView class]])
+        {
+           UIActivityIndicatorView* wait = (UIActivityIndicatorView*)item;
+
+            return [wait isAnimating];
+        }
+    }
+    return NO;
+}
+
+- (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(UIImage *)image
+{
+    [self stopImgAnimating];
+    self.image = image;
+}
+- (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(UIImage *)image forURL:(NSURL *)url
+{
+    [self stopImgAnimating];
+    self.image = image;
+}
+- (void)webImageManager:(SDWebImageManager *)imageManager didFailWithError:(NSError *)error
+{
+    [self stopImgAnimating];
+}
+- (void)webImageManager:(SDWebImageManager *)imageManager didFailWithError:(NSError *)error forURL:(NSURL *)url
+{
+    [self stopImgAnimating];
+}
+@end
+
 @implementation ScrollImageItem
 @synthesize imageView;
 
@@ -16,7 +90,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor blackColor];
+        self.backgroundColor = [UIColor grayColor];
         // Initialization code
         imageView = [[UIImageView alloc] initWithFrame: self.bounds];
         imageView.backgroundColor = [UIColor blackColor];
@@ -45,6 +119,7 @@
 {
     imageView.frame = self.bounds;
     imageBt.frame = self.bounds;
+    [imageView startImgAnimating];
     [imageView setImageWithURL:[NSURL URLWithString:imgUrl]];
      self.tag = itemIndex;
 }
@@ -54,6 +129,7 @@
     [imageView release], imageView = nil;
     [imageBt release], imageBt = nil;
     [imageTitle release], imageTitle = nil;
+    [super dealloc];
 }
 
 @end
