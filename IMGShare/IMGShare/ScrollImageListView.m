@@ -16,10 +16,11 @@
 - (CGRect) getNextItemFrame:(CGSize) size;
 - (CGRect) getProItemFrame:(CGSize) size;
 //- (void) addPos:(CGRect) frame toTopList:(bool) isBottom withDirDown: (bool) downMove;
-- (void) addPosItem2PrePage:(CGRect) frame toListPos:(bool) isStart;
-- (void) addPosItem2NextPage:(CGRect) frame toListPos:(bool) isStart;
+- (void) addPosItem2PrePage:(CGPoint) newPos toListHead:(bool) isStart;
+- (void) addPosItem2NextPage:(CGPoint) newPos toListHead:(bool) isStart;
 - (void) addImageItemTolist:(ScrollImageItem*) scrollItem withIndex:(int) itemIndex toListHeader:(bool) isHeader;
 - (CGSize) GetSizeInView:(CGSize) orgialSize;
+- (void) configImage:(ScrollImageItem*) item withIndex:(int) index;
 
 @end
 
@@ -60,6 +61,7 @@
     reuseItemList = [[NSMutableArray alloc] initWithCapacity:rowCount];
     nextPageItemPosArr = [[NSMutableArray alloc] initWithCapacity:rowCount];
     prePageItemPosArr = [[NSMutableArray alloc] initWithCapacity:rowCount];
+    initPosInFirstRow = [[NSMutableArray alloc] initWithCapacity:rowCount];
     proPageCachePosHeight = frame.size.height / 2;
     nextPageCachePosHeight = proPageCachePosHeight;
     eachItemWidGrap = 4;
@@ -77,18 +79,13 @@
     {
         ScrollImageItem* item = [[ScrollImageItem alloc] initWithFrame:CGRectZero
                                                               delegate:self];
-        [self addImageItemTolist: item withIndex: index toListHeader: NO];
-        
+        //[self addImageItemTolist: item withIndex: index toListHeader: NO];
+        [self configImage:item withIndex:index];
         [item release];
-        if (nextPageItemPosArr.count == countEachRow )
+        
+        if (nextPageItemPosArr.count >= countEachRow )
         {
-            int offset =  [[nextPageItemPosArr objectAtIndex: nextPageItemPosArr.count - 1] CGPointValue].y ;
-            
-            if (offset > self.frame.size.height + nextPageCachePosHeight)
-            {
-                //self.contentSize = CGSizeMake(self.frame.size.width, MAX(offset ,0));
-                break;
-            }
+            break;
         }
     }
     
@@ -100,11 +97,34 @@
     }
 }
 
-- (void) configLayout:(NSArray*) listPosArr
+- (void) configImage:(ScrollImageItem*) scrollItem withIndex:(int) itemIndex
 {
-    for (int index = 0; index < listPosArr.count; index++) 
+    if (imageDelegate && [imageDelegate respondsToSelector:@selector(GetImageItem:)])
     {
+        BlogDataItem* itemData = (BlogDataItem*)[imageDelegate GetImageItem:itemIndex];
+        if (itemData) 
+        {
+            
+            NSString* url = [UtilsModel GetFullBlogUrlStr:itemData.pic_pid withImgType:EImageThumb];
+            [scrollItem config:url withIndex:itemIndex];
+            
+            scrollItem.hidden = NO;
 
+            [visibleItemList addObject:scrollItem];
+        
+            [self addSubview:scrollItem];
+            
+            CGRect frame = scrollItem.frame;
+            if (itemIndex < countEachRow) 
+            {
+                [initPosInFirstRow addObject:[NSValue valueWithCGPoint:CGPointMake(frame.origin.x, frame.origin.y + frame.size.height)]];
+            }
+            int offsetY = frame.origin.y + frame.size.height;
+            if (offsetY > self.frame.size.height + nextPageCachePosHeight)
+            {
+                [self addPosItem2NextPage:CGPointMake(frame.origin.x, offsetY) toListHead:NO];
+            }
+        }
     }
 }
 
@@ -133,14 +153,13 @@
             {
                 scrollItem.frame = [self getProItemFrame:CGSizeMake([itemData.pic_pwidth floatValue], [itemData.pic_pheight floatValue])];
                 //[self addPos:scrollItem.frame toTopList:YES withDirDown:NO];   
-                [self addPosItem2PrePage:scrollItem.frame toListPos:YES];
+                [self addPosItem2PrePage:scrollItem.frame.origin toListHead:YES];
             }
             else
             {
                 scrollItem.frame = [self getNextItemFrame:CGSizeMake([itemData.pic_pwidth floatValue], [itemData.pic_pheight floatValue])];
                 //[self addPos:scrollItem.frame toTopList:NO withDirDown:YES];   
-                [self addPosItem2NextPage:scrollItem.frame toListPos:NO];
-
+                [self addPosItem2NextPage:CGPointMake(scrollItem.frame.origin.x, scrollItem.frame.origin.y + scrollItem.frame.size.height) toListHead:NO];
             }
             
             NSString* url = [UtilsModel GetFullBlogUrlStr:itemData.pic_pid withImgType:EImageThumb];
@@ -174,13 +193,13 @@
         {
             //[self addPos:scrollItem.frame toTopList:YES withDirDown:NO];  
             CGRect scrollRect = scrollItem.frame;
-            CGRect rect = CGRectMake(scrollRect.origin.x, scrollRect.origin.y + scrollRect.size.height, 0, 0);
-            [self addPosItem2PrePage:rect toListPos:NO];
+            CGPoint pos = CGPointMake(scrollRect.origin.x, scrollRect.origin.y + scrollRect.size.height);
+            [self addPosItem2PrePage:pos toListHead:NO];
         }
         else
         {
             //[self addPos:scrollItem.frame toTopList:NO withDirDown:YES];   
-            [self addPosItem2NextPage:scrollItem.frame toListPos:YES];
+            [self addPosItem2NextPage:scrollItem.frame.origin toListHead:YES];
             
         }
         
@@ -327,7 +346,7 @@
 //    }
 //}
 
-- (void) addPosItem2PrePage:(CGRect) frame toListPos:(bool) isStart
+- (void) addPosItem2PrePage:(CGPoint) newPos toListHead:(bool) isStart
 {
     if (isStart)
     {
@@ -338,14 +357,14 @@
         int index = 0;
         for (; index < prePageItemPosArr.count; index++)
         {
-            if (frame.origin.y < [[prePageItemPosArr objectAtIndex:index] CGPointValue].y)
+            if (newPos.y < [[prePageItemPosArr objectAtIndex:index] CGPointValue].y)
             {
-                [prePageItemPosArr insertObject:[NSValue valueWithCGPoint:frame.origin] atIndex:index];
+                [prePageItemPosArr insertObject:[NSValue valueWithCGPoint:newPos] atIndex:index];
                 break;
             }
         }
         if (index == prePageItemPosArr.count) {
-            [prePageItemPosArr addObject:[NSValue valueWithCGPoint:frame.origin]];
+            [prePageItemPosArr addObject:[NSValue valueWithCGPoint:newPos]];
         }
         
     }
@@ -356,24 +375,31 @@
             [prePageItemPosArr removeObjectAtIndex:0];
         }
         
-        int index = 0;
-        for (; index < prePageItemPosArr.count; index++)
+        int index = prePageItemPosArr.count - 1;
+        for (; index >= 0; index--)
         {
-            if (frame.origin.y < [[prePageItemPosArr objectAtIndex:index] CGPointValue].y)
+            if (newPos.y > [[prePageItemPosArr objectAtIndex:index] CGPointValue].y)
             {
-                [prePageItemPosArr insertObject:[NSValue valueWithCGPoint:frame.origin] atIndex:index];
+                if (index == prePageItemPosArr.count - 1)
+                {
+                    [prePageItemPosArr addObject:[NSValue valueWithCGPoint:newPos]];
+                }
+                else 
+                {
+                    [prePageItemPosArr insertObject:[NSValue valueWithCGPoint:newPos] atIndex:index + 1];
+                }     
                 break;
             }
         }
-        if (index == prePageItemPosArr.count) {
-            [prePageItemPosArr addObject:[NSValue valueWithCGPoint:frame.origin]];
+        if (index == -1) {
+            [prePageItemPosArr insertObject:[NSValue valueWithCGPoint:newPos] atIndex:0];
         }
         
     }
 
 }
 
-- (void) addPosItem2NextPage:(CGRect) frame toListPos:(bool) isStart
+- (void) addPosItem2NextPage:(CGPoint) newPos toListHead:(bool) isStart
 {
     if (!isStart) 
     {
@@ -381,22 +407,21 @@
         {
             [nextPageItemPosArr removeObjectAtIndex:0];
         }
-        int index = 0;
-        int posY = frame.size.height + frame.origin.y;
-        for (; index < nextPageItemPosArr.count; index++) 
+        int index = nextPageItemPosArr.count -1;
+        for (; index >= 0; index--) 
         {
-            if (posY < [[nextPageItemPosArr objectAtIndex:index] CGPointValue].y) {
-                [nextPageItemPosArr insertObject:[NSValue valueWithCGPoint:CGPointMake(frame.origin.x, posY)] atIndex:index];
+            if (newPos.y > [[nextPageItemPosArr objectAtIndex:index] CGPointValue].y) 
+            {
+                [nextPageItemPosArr insertObject:[NSValue valueWithCGPoint:newPos] atIndex:index + 1];//越界应直接加在最后？？
                 break;
             }
             
         }
-        if (index == nextPageItemPosArr.count) 
+        if (index == -1) 
         {
-            //index = 0 or for运行到最后
-            [nextPageItemPosArr addObject:[NSValue valueWithCGPoint:CGPointMake(frame.origin.x, posY) ]];   
-            
+            [nextPageItemPosArr insertObject:[NSValue valueWithCGPoint:newPos ] atIndex: 0];
         }
+        
     }
     else//up
     {
@@ -404,20 +429,21 @@
         {
             [nextPageItemPosArr removeObjectAtIndex:countEachRow - 1];
         }
-        int index = nextPageItemPosArr.count -1;
-        int posY = frame.size.height + frame.origin.y;
-        for (; index >= 0; index--) 
+        int index = 0;
+        int posY = newPos.y;
+        for (; index < nextPageItemPosArr.count; index++) 
         {
-            if (posY > [[nextPageItemPosArr objectAtIndex:index] CGPointValue].y) 
-            {
-                [nextPageItemPosArr insertObject:[NSValue valueWithCGPoint:CGPointMake(frame.origin.x, posY)] atIndex:index + 1];//越界应直接加在最后？？
+            if (posY < [[nextPageItemPosArr objectAtIndex:index] CGPointValue].y) {
+                [nextPageItemPosArr insertObject:[NSValue valueWithCGPoint:newPos] atIndex:index];
                 break;
             }
             
         }
-        if (index == -1) 
+        if (index == nextPageItemPosArr.count) 
         {
-            [nextPageItemPosArr insertObject:[NSValue valueWithCGPoint:CGPointMake(frame.origin.x, posY) ] atIndex: 0];
+            //index = 0 or for运行到最后
+            [nextPageItemPosArr addObject:[NSValue valueWithCGPoint:newPos ]];   
+            
         }
     }
 
@@ -470,7 +496,16 @@
     {
         CGSize size = [imageDelegate GetItemSize:curIndex];
         size = [self GetSizeInView: size];
-        CGPoint pos = [[prePageItemPosArr objectAtIndex:prePageItemPosArr.count - 1] CGPointValue];
+        CGPoint pos;
+        //第一行则用保存好的第一行位置，非第一行的item用prePageItemArr处理
+        if (curIndex >= countEachRow) 
+        {
+            pos = [[prePageItemPosArr objectAtIndex:prePageItemPosArr.count - 1] CGPointValue];
+        }
+        else if(curIndex < initPosInFirstRow.count)
+        {
+            pos = [[initPosInFirstRow objectAtIndex:curIndex] CGPointValue];
+        }
         
         if (pos.y - self.contentOffset.y + proPageCachePosHeight > 0 ) 
         {
@@ -506,7 +541,7 @@
     for (int index = 0; index < visibleItemList.count; index ++) 
     {
         ScrollImageItem* item = [visibleItemList objectAtIndex:index];
-        if ( item.frame.origin.y + item.frame.size.height - self.contentOffset.y + nextPageCachePosHeight < 0)
+        if ( item.frame.origin.y + item.frame.size.height - self.contentOffset.y + proPageCachePosHeight < 0)
         {
             //[self removeImageItemFromList:item fromListHeader:YES];
             [delArr addObject:item];
@@ -527,6 +562,10 @@
     }
     [delArr removeAllObjects];
     [delArr release], delArr = nil;
+    
+    
+    ///////////////////////////////////////////////////
+    
     
     ScrollImageItem* lastItem = [visibleItemList objectAtIndex:visibleItemList.count -1];
     int lastItemIndex = lastItem.tag;

@@ -15,6 +15,8 @@
     
     //id              btDelegate;
     UILabel*        imageTitle;
+    
+    UIActivityIndicatorView* imageWait;
 }
 
 @property (nonatomic, retain) UIImageView* imageView;

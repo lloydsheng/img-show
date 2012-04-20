@@ -18,8 +18,9 @@
 
 @interface ScrollImageListView : UIScrollView
 {
+    NSMutableArray*        initPosInFirstRow;//记录第一行元素左下角位置
     NSMutableArray*        allItemsPosArr;//所有item的pos，即排板
-    NSMutableArray*        visibleItemList;//排序可视队列
+    NSMutableArray*        visibleItemList;//y值递增排序可视队列
     NSMutableArray*        reuseItemList;//非可视待重用队列
     
     NSMutableArray*        nextPageItemPosArr;//下一页要载入新子项的位置,递增排序，数量固定为可显示的列数
@@ -39,7 +40,7 @@
 @property (nonatomic, assign) id    imageDelegate;
 - (id) initWithFrame: (CGRect) frame withRowCount: (int) rowCount;
 
-- (void) configLayout:(NSArray*) listPosArr;
+//- (void) configLayout:(NSArray*) listPosArr;
 
 - (void) config;
 
