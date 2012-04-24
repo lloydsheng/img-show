@@ -23,7 +23,7 @@
     return self;
 }
 
-- (void) addItem:(BlogDataItem*) dataItem withIndex:(int) index
+- (void) initSubItem:(BlogDataItem*) dataItem withIndex:(int) index
 {
     if ([self isBottomCanAddItemInScreen:[delegate getBottomCacheOffset]])
     {
@@ -40,11 +40,50 @@
         
         ColumnItem* column = [[ColumnItem alloc] initWithFrame:item.frame withIndex:index];
         [column configItem:item];
-        
         [itemsList addObject:column];
+        [column release];
     }
-    
-    
+    else
+    {
+        CGPoint pos = [self getLastPos];
+        int columnHeight = [self getItemHeightInList:[dataItem getSize]];
+        CGRect rect = CGRectMake(pos.x, pos.y, columnWidth, columnHeight);
+        ColumnItem* column = [[ColumnItem alloc] initWithFrame:rect withIndex:index];        
+        [itemsList addObject:column];
+        [column release];
+    }
+}
+
+- (void) configItem:(BlogDataItem*) dataItem withIndex:(int) itemIndex
+{
+    for (int index = 0; index < itemsList.count; index++)
+    {
+        ColumnItem* item = [itemsList objectAtIndex:index];
+        if (itemIndex == [item getItemIndex]) 
+        {
+            if ([item isNoItemView])
+            {
+                ScrollImageItem* imageItem = [delegate getSubImageItem];
+                [item configItem:imageItem];
+            }
+            break;
+        }
+    }
+}
+
+- (void) releaseItem:(int) itemIndex
+{
+    ColumnItem* item = [itemsList objectAtIndex:index];
+
+    for (int index = 0; index < itemsList.count; index++)
+    {
+        if (itemIndex == [itemsList objectAtIndex:index])
+        {
+            [delegate releaseSubImageItem:item.itemView];
+            [item releaseItem];
+            break;
+        }
+    }
 }
 
 - (CGPoint) getFirstPos

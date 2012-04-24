@@ -19,6 +19,8 @@
 - (void) addPosItem2PrePage:(CGPoint) newPos toListHead:(bool) isStart;
 - (void) addPosItem2NextPage:(CGPoint) newPos toListHead:(bool) isStart;
 - (void) addImageItemTolist:(ScrollImageItem*) scrollItem withIndex:(int) itemIndex toListHeader:(bool) isHeader;
+- (int) findPosInFirstRow:(CGPoint) pow;
+
 - (CGSize) GetSizeInView:(CGSize) orgialSize;
 - (void) configImage:(ScrollImageItem*) item withIndex:(int) index;
 
@@ -83,18 +85,14 @@
         [self configImage:item withIndex:index];
         [item release];
         
-        if (nextPageItemPosArr.count >= countEachRow )
+        if (nextPageItemPosArr.count >= countEachRow  && [[nextPageItemPosArr objectAtIndex:0] CGPointValue].y > self.frame.size.height + nextPageCachePosHeight)
         {
+            int offset =  [[nextPageItemPosArr objectAtIndex: nextPageItemPosArr.count - 1] CGPointValue].y  ;
+            self.contentSize = CGSizeMake(self.frame.size.width, offset);
             break;
         }
     }
     
-    if (nextPageItemPosArr.count != 0 )
-    {
-        int offset =  [[nextPageItemPosArr objectAtIndex: nextPageItemPosArr.count - 1] CGPointValue].y  ;
-        self.contentSize = CGSizeMake(self.frame.size.width, offset);
-        
-    }
 }
 
 - (void) configImage:(ScrollImageItem*) scrollItem withIndex:(int) itemIndex
@@ -104,6 +102,7 @@
         BlogDataItem* itemData = (BlogDataItem*)[imageDelegate GetImageItem:itemIndex];
         if (itemData) 
         {
+            scrollItem.frame = [self getNextItemFrame:CGSizeMake([itemData.pic_pwidth floatValue], [itemData.pic_pheight floatValue])];
             
             NSString* url = [UtilsModel GetFullBlogUrlStr:itemData.pic_pid withImgType:EImageThumb];
             [scrollItem config:url withIndex:itemIndex];
@@ -120,7 +119,7 @@
                 [initPosInFirstRow addObject:[NSValue valueWithCGPoint:CGPointMake(frame.origin.x, frame.origin.y + frame.size.height)]];
             }
             int offsetY = frame.origin.y + frame.size.height;
-            if (offsetY > self.frame.size.height + nextPageCachePosHeight)
+            //if (offsetY > self.frame.size.height + nextPageCachePosHeight)
             {
                 [self addPosItem2NextPage:CGPointMake(frame.origin.x, offsetY) toListHead:NO];
             }
@@ -455,90 +454,155 @@
     return CGSizeMake(itemWidth, itemHeight);
 }
 
-- (void) updateVisibleListWhenScroll2Up
-{
-    if(visibleItemList.count == 0)
-        return;
-    
-    int visibleCount = 0;
-    NSMutableArray* delArr = [[NSMutableArray alloc] initWithCapacity:3];
-    for (int index = visibleItemList.count - 1; index >= 0; index --) 
-    {
-        ScrollImageItem* item = [visibleItemList objectAtIndex:index];
-        if (item.frame.origin.y - self.contentOffset.y - self.frame.size.height - proPageCachePosHeight > 0 ) 
-        {
-            //[self removeImageItemFromList:item fromListHeader:YES];
-            [delArr addObject:item];
-        }
-        else
-        {
-            ++visibleCount;
-            if (visibleCount >= countEachRow) 
-            {
-                break;
-            }
-            
-        }
-    }
-    for (int pos = 0; pos < delArr.count; pos++) 
-    {
-        [self removeImageItemFromList:[delArr objectAtIndex:pos] fromListHeader:NO];
-    }
-    [delArr removeAllObjects];
-    [delArr release], delArr = nil;
-    
-    ScrollImageItem* firstItem = [visibleItemList objectAtIndex:0];
-    int lastItemIndex = firstItem.tag;
-    NSLog(@"index tag %d", lastItemIndex);
-
-    
-    for (int curIndex = lastItemIndex - 1 ; curIndex >= 0 && prePageItemPosArr.count > 0; curIndex--)
-    {
-        CGSize size;
-        CGPoint pos;
-        //第一行则用保存好的第一行位置，非第一行的item用prePageItemArr处理
-        if (curIndex >= countEachRow) 
-        {
-            size = [imageDelegate GetItemSize:curIndex];
-            size = [self GetSizeInView: size];
-            pos = [[prePageItemPosArr objectAtIndex:prePageItemPosArr.count - 1] CGPointValue];
-        }
-        else if(curIndex < initPosInFirstRow.count)
-        {
-            //pos = [[initPosInFirstRow objectAtIndex:curIndex] CGPointValue];
-            for (int indexInRow = 0; indexInRow < initPosInFirstRow.count; indexInRow++) 
-            {
-                CGPoint lbPos = [[initPosInFirstRow objectAtIndex:indexInRow] CGPointValue];
-                //if (lbPos == firstItem.frame.origin) 
-                {
-                    
-                }
-            }
-        }
-        
-        if (pos.y - self.contentOffset.y + proPageCachePosHeight > 0 ) 
-        {
-            CGRect rect = [self getProItemFrame:size];
-            ScrollImageItem* item = [self getReuseItem];
-            if (item == nil) 
-            {
-                item = [[[ScrollImageItem alloc] initWithFrame:rect delegate:self] autorelease];
-            }
-            else
-            {
-                [item setFrame:rect];
-            }
-            [item config:[imageDelegate GetItemUrlStr:curIndex] withIndex:curIndex];
-            
-            [self addImageItemTolist:item withIndex:curIndex toListHeader:YES];   
-        }
-        else
-        {
-            break;
-        }
-    }
-
-}
+//- (void) updateVisibleListWhenScroll2Up
+//{
+//    if(visibleItemList.count == 0)
+//        return;
+//    
+//    int visibleCount = 0;
+//    NSMutableArray* delArr = [[NSMutableArray alloc] initWithCapacity:3];
+//    for (int index = visibleItemList.count - 1; index >= 0; index --) 
+//    {
+//        ScrollImageItem* item = [visibleItemList objectAtIndex:index];
+//        if (item.frame.origin.y - self.contentOffset.y - self.frame.size.height - proPageCachePosHeight > 0 ) 
+//        {
+//            //[self removeImageItemFromList:item fromListHeader:YES];
+//            [delArr addObject:item];
+//        }
+//        else
+//        {
+//            ++visibleCount;
+//            if (visibleCount >= countEachRow) 
+//            {
+//                break;
+//            }
+//            
+//        }
+//    }
+//    for (int pos = 0; pos < delArr.count; pos++) 
+//    {
+//        [self removeImageItemFromList:[delArr objectAtIndex:pos] fromListHeader:NO];
+//    }
+//    [delArr removeAllObjects];
+//    [delArr release], delArr = nil;
+//    
+//    ScrollImageItem* firstItem = [visibleItemList objectAtIndex:0];
+//    int lastItemIndex = firstItem.tag;
+//    NSLog(@"index tag %d", lastItemIndex);
+//    
+//    /////////////////////////////////////////////////////
+//    int nowIndex = -1;
+//    if ([prePageItemPosArr count] > 0)
+//    {
+//<<<<<<< .mine
+//        nowIndex = [self findPosInFirstRow:[[prePageItemPosArr objectAtIndex:0] CGPointValue]];
+//    }
+//    if (nowIndex != -1)
+//    {
+//        CGSize size = [imageDelegate GetItemSize:nowIndex];
+//        size = [self GetSizeInView: size];
+//=======
+//        CGSize size;
+//>>>>>>> .r5
+//        CGRect rect = [self getProItemFrame:size];
+//        ScrollImageItem* item = [self getReuseItem];
+//        if (item == nil) 
+//        {
+//<<<<<<< .mine
+//            item = [[[ScrollImageItem alloc] initWithFrame:rect delegate:self] autorelease];
+//=======
+//            size = [imageDelegate GetItemSize:curIndex];
+//            size = [self GetSizeInView: size];
+//            pos = [[prePageItemPosArr objectAtIndex:prePageItemPosArr.count - 1] CGPointValue];
+//>>>>>>> .r5
+//        }
+//        else
+//        {
+//<<<<<<< .mine
+//            [item setFrame:rect];
+//=======
+//            //pos = [[initPosInFirstRow objectAtIndex:curIndex] CGPointValue];
+//            for (int indexInRow = 0; indexInRow < initPosInFirstRow.count; indexInRow++) 
+//            {
+//                CGPoint lbPos = [[initPosInFirstRow objectAtIndex:indexInRow] CGPointValue];
+//                //if (lbPos == firstItem.frame.origin) 
+//                {
+//                    
+//                }
+//            }
+//>>>>>>> .r5
+//        }
+//        [item config:[imageDelegate GetItemUrlStr:nowIndex] withIndex:nowIndex];
+//        
+//        [self addImageItemTolist:item withIndex:nowIndex toListHeader:YES];  
+//    }
+////    if (lastItemIndex <= countEachRow)
+////    {
+////        int lastPosY = [[prePageItemPosArr objectAtIndex:0] CGPointValue].y;
+////        for (int rowIndex = 0; rowIndex < countEachRow; rowIndex++) {
+////            CGPoint pos = [[initPosInFirstRow objectAtIndex: rowIndex] CGPointValue];
+////            if (pos.y == lastPosY) 
+////            {
+////                CGSize size = [imageDelegate GetItemSize:rowIndex];
+////                size = [self GetSizeInView: size];
+////                CGRect rect = [self getProItemFrame:size];
+////                ScrollImageItem* item = [self getReuseItem];
+////                if (item == nil) 
+////                {
+////                    item = [[[ScrollImageItem alloc] initWithFrame:rect delegate:self] autorelease];
+////                }
+////                else
+////                {
+////                    [item setFrame:rect];
+////                }
+////                [item config:[imageDelegate GetItemUrlStr:rowIndex] withIndex:rowIndex];
+////                
+////                [self addImageItemTolist:item withIndex:rowIndex toListHeader:YES];  
+////            }
+////        }
+////    }
+//    else
+//    {
+//        for (int curIndex = lastItemIndex - 1 ; curIndex >= 0 && prePageItemPosArr.count > 0; curIndex--)
+//        {
+//            CGSize size = [imageDelegate GetItemSize:curIndex];
+//            size = [self GetSizeInView: size];
+//            CGPoint pos;
+//            //第一行则用保存好的第一行位置，非第一行的item用prePageItemArr处理
+//            if (curIndex >= countEachRow) 
+//            {
+//                pos = [[prePageItemPosArr objectAtIndex:prePageItemPosArr.count - 1] CGPointValue];
+//            }
+//            else if(curIndex < initPosInFirstRow.count)
+//            {
+//                pos = [[initPosInFirstRow objectAtIndex:curIndex] CGPointValue];
+//            }
+//            
+//            if (pos.y - self.contentOffset.y + proPageCachePosHeight > 0 ) 
+//            {
+//                CGRect rect = [self getProItemFrame:size];
+//                ScrollImageItem* item = [self getReuseItem];
+//                if (item == nil) 
+//                {
+//                    item = [[[ScrollImageItem alloc] initWithFrame:rect delegate:self] autorelease];
+//                }
+//                else
+//                {
+//                    [item setFrame:rect];
+//                }
+//                [item config:[imageDelegate GetItemUrlStr:curIndex] withIndex:curIndex];
+//                
+//                [self addImageItemTolist:item withIndex:curIndex toListHeader:YES];   
+//            }
+//            else
+//            {
+//                break;
+//            }
+//        }
+//
+//    }
+//
+//}
 
 - (void) updateVisibleListWhenScroll2Down
 {
@@ -619,6 +683,19 @@
 - (void) btPressed
 {
     
+}
+
+- (int) findPosInFirstRow:(CGPoint) pow
+{
+    int ret = -1;
+    for (int index = initPosInFirstRow.count -1; index >=0; index--)
+    {
+        CGPoint curpos = [[initPosInFirstRow objectAtIndex:index] CGPointValue];
+        if (pow.y == curpos.y && pow.x == curpos.x) {
+            return index;
+        }
+    }
+    return ret;
 }
 
 @end

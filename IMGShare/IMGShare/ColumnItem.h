@@ -26,6 +26,7 @@
 - (int) getItemIndex;
 - (bool) beforeYPos:(int) Ypos;
 - (bool) afterYPos:(int) Ypos;
+- (bool) isNoItemView;
 
 @property (nonatomic, assign) CGPoint topLeftPos;
 @property (nonatomic, assign) CGPoint bottomLeftPos;
