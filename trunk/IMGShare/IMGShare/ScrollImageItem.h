@@ -25,4 +25,6 @@
 
 - (void) config: (NSString*) imgUrl withIndex:(int) itemIndex;
 
+- (void) releaseInfo;
+
 @end

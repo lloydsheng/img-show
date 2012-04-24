@@ -10,10 +10,13 @@
 #import "ScrollImageItem.h"
 #import "BlogDataItem.h"
 #import "UtilsModel.h"
+#import "ColumnItemsList.h"
 
 @interface ScrollImageListExView(Private)
 - (void) confiyArr:(NSMutableArray*) array withLimit:(int) count;
 - (CGSize) GetSizeInView:(CGSize) orgialSize;
+- (ColumnItemsList*) getNextPosColumn;
+- (ColumnItemsList*) getPrePosColumn;
 
 @end
 
@@ -40,17 +43,6 @@
         itemCountEachRow = column;
     }
     
-    allItemsColumn = [[NSMutableArray alloc] initWithCapacity:column];
-    for (int index = 0; index < column; index++)
-    {
-        [allItemsColumn addObject:[NSMutableArray arrayWithCapacity:10]];
-    }
-    
-    preCachePosArr = [[NSMutableArray alloc] initWithCapacity:column];
-    [self confiyArr:preCachePosArr withLimit:column];
-    nextCachePosArr = [[NSMutableArray alloc] initWithCapacity:column];
-    [self confiyArr:nextCachePosArr withLimit:column];
-    
     reuseList = [[NSMutableArray alloc] initWithCapacity:10];
     
     hightPreCache = frame.size.height / 2;
@@ -59,96 +51,28 @@
     eachItemWidGrap = 4;
     itemWidth = (self.bounds.size.width - itemCountEachRow * (eachItemWidGrap + 1)) / itemCountEachRow;
     
+    allItemsColumn = [[NSMutableArray alloc] initWithCapacity:column];
+    for (int index = 0; index < column; index++)
+    {
+        [allItemsColumn addObject:[[ColumnItemsList alloc] init:self withWidth:itemWidth]];
+    }
+    
     return self;
     
 }
 
 - (void) config
 {
-//    for (int index = 0; index < [imageDelegate GetItemsCount]; index++)
-//    {
-//        ScrollImageItem* item = [[ScrollImageItem alloc] initWithFrame:CGRectZero
-//                                                              delegate:self];
-//        [self configImage:item withIndex:index];
-//        [item release];
-//        
-//        if (nextPageItemPosArr.count >= countEachRow )
-//        {
-//            break;
-//        }
-//    }
-//    
-//    if (nextPageItemPosArr.count != 0 )
-//    {
-//        int offset =  [[nextPageItemPosArr objectAtIndex: nextPageItemPosArr.count - 1] CGPointValue].y  ;
-//        self.contentSize = CGSizeMake(self.frame.size.width, offset);
-//        
-//    }
+
     for (int itemIndex = 0; itemIndex < [imageDelegate GetItemsCount]; itemIndex++) 
     {
-        int colunmNum = -1;
-        int offset = 0;
-        NSMutableArray* list = [allItemsColumn objectAtIndex:index];
-        for (int index = 0; index < itemCountEachRow; index++)
+        
+        ColumnItemsList* list = [self getNextPosColumn];
+        if (list)
         {
-            if (list.count == 0) 
-            {
-                ScrollImageItem* item = [[ScrollImageItem alloc] initWithFrame:CGRectZero
-                                                                              delegate:self];
-                CGPoint pos = CGPointMake(index * itemWidth + eachItemWidGrap * (index + 1), 0);
-                [self configImage:item withIndex:index withPos: pos];
-                [list addObject:[NSValue valueWithCGRect:item.frame]];
-                [self addSubview:item];
-                [item release];
-                break;
-            }
-            
-            CGRect rect = [[list objectAtIndex:list.count - 1] CGRectValue];
-            int curItemY = rect.origin.y + rect.size.height;
-            if(offset > curItemY) 
-            {
-                offset = curItemY;
-                colunmNum = index;
-            }
+            BlogDataItem* itemData = (BlogDataItem*)[imageDelegate GetImageItem:itemIndex];
+            [list initSubItem: itemData withIndex:itemIndex];
         }
-        if (colunmNum != -1)
-        {
-            CGPoint pos = CGPointMake(colunmNum * itemWidth + eachItemWidGrap * (colunmNum + 1), 0);
-            
-            if (pos.y > self.contentOffset.y + self.frame.size.height + hightNextCache)
-            {
-                CGSize size = [self GetSizeInView:[imageDelegate GetItemSize:itemIndex]];
-                [list addObject:[NSValue valueWithCGRect:CGRectMake(pos.x, pos.y, size.width, size.height)]];
-
-            }
-            else 
-            {
-                ScrollImageItem* item = [[ScrollImageItem alloc] initWithFrame:CGRectZero
-                                                                      delegate:self];
-                [self configImage:item withIndex:itemIndex withPos: pos];
-                [list addObject:[NSValue valueWithCGRect:item.frame]];
-                [self addSubview:item];
-                [item release];
-            }
-
-        }
-    }
-
-}
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
-
-- (void) confiyArr:(NSMutableArray*) array withLimit:(int) count
-{
-    for (int index = 0; index < count; index++) {
-        [array addObject:[NSNumber numberWithInt:0]];
     }
 }
 
@@ -174,6 +98,98 @@
 {
     int itemHeight = orgialSize.height * itemWidth / (orgialSize.width ? orgialSize.width : 300);
     return CGSizeMake(itemWidth, itemHeight);
+}
+
+- (ColumnItemsList*) getNextPosColumn
+{
+    if (allItemsColumn.count ==0)
+    {
+        return nil;
+    }
+    int offsetY = 0;
+    int index = 0;
+    int lastIndex = 0;
+    for (; index < allItemsColumn; index++) {
+        ColumnItemsList* item = [allItemsColumn objectAtIndex: index];
+        if (index == 0) 
+        {
+            offsetY = [item getLastPos].y;
+            lastIndex = 0;
+        }
+        else if ([item getLastPos].y < offsetY)
+        {
+            offsetY = [item getLastPos].y;
+            lastIndex = index;
+        }
+    }
+    return [allItemsColumn objectAtIndex:lastIndex];
+}
+
+- (ColumnItemsList*) getPrePosColumn
+{
+    if (allItemsColumn.count ==0)
+    {
+        return nil;
+    }
+    int offsetY = 0;
+    int index = 0;
+    int lastIndex = 0;
+    for (; index < allItemsColumn; index++) {
+        ColumnItemsList* item = [allItemsColumn objectAtIndex: index];
+        if (index == 0) 
+        {
+            offsetY = [item getLastPos].y;
+            lastIndex = 0;
+        }
+        else if ([item getLastPos].y > offsetY)
+        {
+            offsetY = [item getLastPos].y;
+            lastIndex = index;
+        }
+    }
+    return [allItemsColumn objectAtIndex:lastIndex];
+}
+
+#pragma mark
+#pragma ColumnListDelegate
+- (int) getTopCacheOffset
+{
+    return hightPreCache;
+}
+
+- (int) getBottomCacheOffset
+{
+    return hightNextCache;
+}
+- (ScrollImageItem*) getSubImageItem
+{
+    if (reuseList.count > 0) 
+    {
+        ScrollImageItem* item = [reuseList objectAtIndex:0];
+        [item retain];
+        [reuseList removeObjectAtIndex:0];
+        return [item autorelease];
+    }
+    else
+    {
+        ScrollImageItem* item = [[ScrollImageItem alloc] initWithFrame:CGRectZero delegate:self];
+        return [item autorelease];
+    }
+    
+}
+
+- (void) releaseSubImageItem:(ScrollImageItem*) imageItem
+{
+    if (imageItem)
+    {
+        [imageItem releaseInfo];
+        [reuseList addObject:imageItem];
+    }
+}
+
+- (void) btPressed
+{
+    
 }
 
 

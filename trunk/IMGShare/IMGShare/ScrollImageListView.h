@@ -28,6 +28,7 @@
     
     int                    nextPageCachePosHeight;//下面暂存内存中的内容的高度
     int                    proPageCachePosHeight;//上面暂存内存中的内容的高度
+
     
     int                     eachItemWidGrap;
     int                     itemWidth;

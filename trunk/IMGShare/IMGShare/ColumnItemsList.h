@@ -15,6 +15,7 @@
 - (int) getTopCacheOffset;
 - (int) getBottomCacheOffset;
 - (ScrollImageItem*) getSubImageItem;
+- (void) releaseSubImageItem:(ScrollImageItem*) imageItem;
 
 @end
 
@@ -29,7 +30,9 @@
 }
 
 - (id) init:(id) delegate withWidth:(int) columnWid;
-- (void) addItem:(BlogDataItem*) dataItem withIndex:(int) index;
+- (void) initSubItem:(BlogDataItem*) dataItem withIndex:(int) index;
+- (void) configItem:(BlogDataItem*) dataItem withIndex:(int) index;
+- (void) releaseItem:(int) index;
 
 - (CGPoint) getFirstPos;
 

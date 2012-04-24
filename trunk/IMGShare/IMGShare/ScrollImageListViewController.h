@@ -6,12 +6,12 @@
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "ScrollImageListView.h"
+#import "ScrollImageListExView.h"
 
 @interface ScrollImageListViewController : UIViewController<ScrollImageListViewDelegate, UIScrollViewDelegate>
 {
     //NSMutableArray*     imageDataList;
-    ScrollImageListView*    imageListView;
+    ScrollImageListExView*    imageListView;
     //上一次scrollview y偏移量
     int                 lastOffsetY;
 }

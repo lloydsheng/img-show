@@ -68,4 +68,15 @@
     }
 }
 
+- (bool) isNoItemView
+{
+    if (itemView) {
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
+}
+
 @end

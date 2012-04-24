@@ -39,8 +39,8 @@
 {
     [super loadView];
     CGRect rect = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 60);//应可以用属性设置
-    imageListView = [[ScrollImageListView alloc] initWithFrame:rect withRowCount:kGridItemCountEachRow];
-    imageListView.imageDelegate = self;
+    imageListView = [[ScrollImageListExView alloc] initWithFrame:rect withColumn:kGridItemCountEachRow];
+    //imageListView.imageDelegate = self;
     imageListView.showsHorizontalScrollIndicator = NO;
     imageListView.showsVerticalScrollIndicator = NO;
     imageListView.scrollsToTop = YES;

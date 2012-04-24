@@ -8,17 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "ScrollImageListView.h"
-
-@interface ScrollImageListExView : UIScrollView
+#import "ColumnItemsList.h"
+@interface ScrollImageListExView : UIScrollView<ColumnListDelegate>
 {
     //列数
     int itemCountEachRow;
     //所有列的数组
     NSMutableArray* allItemsColumn;
-    //上一页暂存位置
-    NSMutableArray* preCachePosArr;
-    //下一页暂存位置
-    NSMutableArray* nextCachePosArr;
     
     NSMutableArray* reuseList;
     
