@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27D3868C154633060045F81A /* ScrollImageListExView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3868B154633060045F81A /* ScrollImageListExView.m */; };
+		27D386A915468F0F0045F81A /* ColumnItemsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D386A815468F0F0045F81A /* ColumnItemsList.m */; };
+		27D386AC15468FF80045F81A /* ColumnItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D386AB15468FF80045F81A /* ColumnItem.m */; };
 		D73D6CEF1537D23E00EF2E31 /* default_photo.png in Resources */ = {isa = PBXBuildFile; fileRef = D73D6CEE1537D23E00EF2E31 /* default_photo.png */; };
 		D73D6CF11537FE4400EF2E31 /* typelist.plist in Resources */ = {isa = PBXBuildFile; fileRef = D73D6CF01537FE4300EF2E31 /* typelist.plist */; };
 		D78EC5F8153AC38C005CEB1F /* ScrollImageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D78EC5F7153AC38C005CEB1F /* ScrollImageItem.m */; };
@@ -145,6 +148,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		27D3868A154633060045F81A /* ScrollImageListExView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollImageListExView.h; sourceTree = "<group>"; };
+		27D3868B154633060045F81A /* ScrollImageListExView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollImageListExView.m; sourceTree = "<group>"; };
+		27D386A715468F0F0045F81A /* ColumnItemsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnItemsList.h; sourceTree = "<group>"; };
+		27D386A815468F0F0045F81A /* ColumnItemsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnItemsList.m; sourceTree = "<group>"; };
+		27D386AA15468FF80045F81A /* ColumnItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnItem.h; sourceTree = "<group>"; };
+		27D386AB15468FF80045F81A /* ColumnItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnItem.m; sourceTree = "<group>"; };
 		D73D6CEE1537D23E00EF2E31 /* default_photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_photo.png; sourceTree = "<group>"; };
 		D73D6CF01537FE4300EF2E31 /* typelist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = typelist.plist; sourceTree = "<group>"; };
 		D78EC5F6153AC38C005CEB1F /* ScrollImageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollImageItem.h; sourceTree = "<group>"; };
@@ -453,10 +462,16 @@
 				D7C4BCAD1539383F00477671 /* SelfGridItem.m */,
 				D7C98324153A829C00119FA5 /* ScrollImageListView.h */,
 				D7C98325153A829C00119FA5 /* ScrollImageListView.m */,
+				27D3868A154633060045F81A /* ScrollImageListExView.h */,
+				27D3868B154633060045F81A /* ScrollImageListExView.m */,
 				D78EC5F6153AC38C005CEB1F /* ScrollImageItem.h */,
 				D78EC5F7153AC38C005CEB1F /* ScrollImageItem.m */,
 				D78EC5F9153ACBDF005CEB1F /* ScrollImageListViewController.h */,
 				D78EC5FA153ACBDF005CEB1F /* ScrollImageListViewController.m */,
+				27D386A715468F0F0045F81A /* ColumnItemsList.h */,
+				27D386A815468F0F0045F81A /* ColumnItemsList.m */,
+				27D386AA15468FF80045F81A /* ColumnItem.h */,
+				27D386AB15468FF80045F81A /* ColumnItem.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -960,6 +975,9 @@
 				D7C98326153A829C00119FA5 /* ScrollImageListView.m in Sources */,
 				D78EC5F8153AC38C005CEB1F /* ScrollImageItem.m in Sources */,
 				D78EC5FB153ACBDF005CEB1F /* ScrollImageListViewController.m in Sources */,
+				27D3868C154633060045F81A /* ScrollImageListExView.m in Sources */,
+				27D386A915468F0F0045F81A /* ColumnItemsList.m in Sources */,
+				27D386AC15468FF80045F81A /* ColumnItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

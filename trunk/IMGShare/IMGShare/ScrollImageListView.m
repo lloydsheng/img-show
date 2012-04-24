@@ -494,17 +494,26 @@
     
     for (int curIndex = lastItemIndex - 1 ; curIndex >= 0 && prePageItemPosArr.count > 0; curIndex--)
     {
-        CGSize size = [imageDelegate GetItemSize:curIndex];
-        size = [self GetSizeInView: size];
+        CGSize size;
         CGPoint pos;
         //第一行则用保存好的第一行位置，非第一行的item用prePageItemArr处理
         if (curIndex >= countEachRow) 
         {
+            size = [imageDelegate GetItemSize:curIndex];
+            size = [self GetSizeInView: size];
             pos = [[prePageItemPosArr objectAtIndex:prePageItemPosArr.count - 1] CGPointValue];
         }
         else if(curIndex < initPosInFirstRow.count)
         {
-            pos = [[initPosInFirstRow objectAtIndex:curIndex] CGPointValue];
+            //pos = [[initPosInFirstRow objectAtIndex:curIndex] CGPointValue];
+            for (int indexInRow = 0; indexInRow < initPosInFirstRow.count; indexInRow++) 
+            {
+                CGPoint lbPos = [[initPosInFirstRow objectAtIndex:indexInRow] CGPointValue];
+                //if (lbPos == firstItem.frame.origin) 
+                {
+                    
+                }
+            }
         }
         
         if (pos.y - self.contentOffset.y + proPageCachePosHeight > 0 ) 
