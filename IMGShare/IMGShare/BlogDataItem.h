@@ -35,6 +35,7 @@
 
 }
 
+-(CGSize) getSize;
 
 @property (nonatomic, retain) NSString* pic_pid;
 @property (nonatomic, retain) NSString* pic_pwidth;

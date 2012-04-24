@@ -67,6 +67,12 @@
     return self;
 }
 
+-(CGSize) getSize;
+{
+    return CGSizeMake([self.pic_pwidth floatValue], [self.pic_pheight floatValue]);
+}
+
+
 -(void) dealloc
 {
     self.pic_pid = nil;
