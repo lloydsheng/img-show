@@ -38,15 +38,23 @@
 - (void)loadView
 {
     [super loadView];
+    
+//    CGRect rect = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 60);//应可以用属性设置
+//    imageListView = [[ScrollImageListExView alloc] initWithFrame:rect withColumn:kGridItemCountEachRow];
+//    imageListView.imageDelegate = self;
+//    imageListView.showsHorizontalScrollIndicator = NO;
+//    imageListView.showsVerticalScrollIndicator = NO;
+//    imageListView.scrollsToTop = YES;
+//    imageListView.delegate = self;
+//    [imageListView config];
+//    [self.view addSubview:imageListView];
+//    lastOffsetY = 0;
     CGRect rect = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 60);//应可以用属性设置
-    imageListView = [[ScrollImageListExView alloc] initWithFrame:rect withColumn:kGridItemCountEachRow];
-    //imageListView.imageDelegate = self;
-    imageListView.showsHorizontalScrollIndicator = NO;
-    imageListView.showsVerticalScrollIndicator = NO;
-    imageListView.scrollsToTop = YES;
-    imageListView.delegate = self;
-    [imageListView config];
-    [self.view addSubview:imageListView];
+    list = [[ScrollImageListExView alloc] initWithFrame:rect withColumn:kGridItemCountEachRow];
+    //list = [[ScrollImageListExView alloc] initWithFrame:rect withColumn:kGridItemCountEachRow];
+    list.imageDelegate = self;
+    [list config];
+    [self.view addSubview:list];
     lastOffsetY = 0;
     
     
@@ -118,12 +126,12 @@
 {
     if(scrollView.contentOffset.y > lastOffsetY)
     {
-        [imageListView updateVisibleListWhenScroll2Down];
+        [list updateVisibleListWhenScroll2Down];
 
     }
     else if(scrollView.contentOffset.y < lastOffsetY)
     {
-        [imageListView updateVisibleListWhenScroll2Up];
+        [list updateVisibleListWhenScroll2Up];
 
     }
     lastOffsetY = scrollView.contentOffset.y;
