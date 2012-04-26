@@ -31,5 +31,6 @@
 @property (nonatomic, assign) CGPoint topLeftPos;
 @property (nonatomic, assign) CGPoint bottomLeftPos;
 @property (nonatomic, retain) ScrollImageItem* itemView;
+@property (nonatomic, assign) int itemIndex;
 
 @end

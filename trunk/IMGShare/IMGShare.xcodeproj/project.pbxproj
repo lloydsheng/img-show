@@ -10,6 +10,7 @@
 		27D3868C154633060045F81A /* ScrollImageListExView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3868B154633060045F81A /* ScrollImageListExView.m */; };
 		27D386A915468F0F0045F81A /* ColumnItemsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D386A815468F0F0045F81A /* ColumnItemsList.m */; };
 		27D386AC15468FF80045F81A /* ColumnItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D386AB15468FF80045F81A /* ColumnItem.m */; };
+		27DAC569154921DA00872470 /* ScrollImageListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DAC568154921DA00872470 /* ScrollImageListView.m */; };
 		D73D6CEF1537D23E00EF2E31 /* default_photo.png in Resources */ = {isa = PBXBuildFile; fileRef = D73D6CEE1537D23E00EF2E31 /* default_photo.png */; };
 		D73D6CF11537FE4400EF2E31 /* typelist.plist in Resources */ = {isa = PBXBuildFile; fileRef = D73D6CF01537FE4300EF2E31 /* typelist.plist */; };
 		D78EC5F8153AC38C005CEB1F /* ScrollImageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D78EC5F7153AC38C005CEB1F /* ScrollImageItem.m */; };
@@ -127,7 +128,6 @@
 		D790DC2A152EF815005357C3 /* SelfGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = D790DC29152EF813005357C3 /* SelfGridView.m */; };
 		D7B7EC2D153167F800BF7B4C /* cell_profile_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B7EC2C153167F800BF7B4C /* cell_profile_bg.png */; };
 		D7C4BCAE1539383F00477671 /* SelfGridItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D7C4BCAD1539383F00477671 /* SelfGridItem.m */; };
-		D7C98326153A829C00119FA5 /* ScrollImageListView.m in Sources */ = {isa = PBXBuildFile; fileRef = D7C98325153A829C00119FA5 /* ScrollImageListView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +154,8 @@
 		27D386A815468F0F0045F81A /* ColumnItemsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnItemsList.m; sourceTree = "<group>"; };
 		27D386AA15468FF80045F81A /* ColumnItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnItem.h; sourceTree = "<group>"; };
 		27D386AB15468FF80045F81A /* ColumnItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnItem.m; sourceTree = "<group>"; };
+		27DAC567154921D900872470 /* ScrollImageListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollImageListView.h; sourceTree = "<group>"; };
+		27DAC568154921DA00872470 /* ScrollImageListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollImageListView.m; sourceTree = "<group>"; };
 		D73D6CEE1537D23E00EF2E31 /* default_photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_photo.png; sourceTree = "<group>"; };
 		D73D6CF01537FE4300EF2E31 /* typelist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = typelist.plist; sourceTree = "<group>"; };
 		D78EC5F6153AC38C005CEB1F /* ScrollImageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollImageItem.h; sourceTree = "<group>"; };
@@ -331,8 +333,6 @@
 		D7B7EC2C153167F800BF7B4C /* cell_profile_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_profile_bg.png; sourceTree = "<group>"; };
 		D7C4BCAC1539383F00477671 /* SelfGridItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfGridItem.h; sourceTree = "<group>"; };
 		D7C4BCAD1539383F00477671 /* SelfGridItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfGridItem.m; sourceTree = "<group>"; };
-		D7C98324153A829C00119FA5 /* ScrollImageListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollImageListView.h; sourceTree = "<group>"; };
-		D7C98325153A829C00119FA5 /* ScrollImageListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollImageListView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -460,8 +460,8 @@
 				D790DC29152EF813005357C3 /* SelfGridView.m */,
 				D7C4BCAC1539383F00477671 /* SelfGridItem.h */,
 				D7C4BCAD1539383F00477671 /* SelfGridItem.m */,
-				D7C98324153A829C00119FA5 /* ScrollImageListView.h */,
-				D7C98325153A829C00119FA5 /* ScrollImageListView.m */,
+				27DAC567154921D900872470 /* ScrollImageListView.h */,
+				27DAC568154921DA00872470 /* ScrollImageListView.m */,
 				27D3868A154633060045F81A /* ScrollImageListExView.h */,
 				27D3868B154633060045F81A /* ScrollImageListExView.m */,
 				D78EC5F6153AC38C005CEB1F /* ScrollImageItem.h */,
@@ -972,12 +972,12 @@
 				D790DC21152ED08D005357C3 /* SelfPageView.m in Sources */,
 				D790DC2A152EF815005357C3 /* SelfGridView.m in Sources */,
 				D7C4BCAE1539383F00477671 /* SelfGridItem.m in Sources */,
-				D7C98326153A829C00119FA5 /* ScrollImageListView.m in Sources */,
 				D78EC5F8153AC38C005CEB1F /* ScrollImageItem.m in Sources */,
 				D78EC5FB153ACBDF005CEB1F /* ScrollImageListViewController.m in Sources */,
 				27D3868C154633060045F81A /* ScrollImageListExView.m in Sources */,
 				27D386A915468F0F0045F81A /* ColumnItemsList.m in Sources */,
 				27D386AC15468FF80045F81A /* ColumnItem.m in Sources */,
+				27DAC569154921DA00872470 /* ScrollImageListView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

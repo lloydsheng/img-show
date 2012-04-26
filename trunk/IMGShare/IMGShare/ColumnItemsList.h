@@ -15,6 +15,7 @@
 - (int) getTopCacheOffset;
 - (int) getBottomCacheOffset;
 - (ScrollImageItem*) getSubImageItem;
+- (id) getSubDataItem:(int) allListIndex;
 - (void) releaseSubImageItem:(ScrollImageItem*) imageItem;
 
 @end
@@ -27,19 +28,33 @@
     id<ColumnListDelegate> delegate;
     
     int     columnWidth;
+    int     columnXPos;
 }
 
-- (id) init:(id) delegate withWidth:(int) columnWid;
+- (id) init:(id) delegate withWidth:(int) columnWid offset:(int) posX;
 - (void) initSubItem:(BlogDataItem*) dataItem withIndex:(int) index;
 - (void) configItem:(BlogDataItem*) dataItem withIndex:(int) index;
+- (void) configItemBefore:(BlogDataItem*) dataItem withIndex:(int) index;
 - (void) releaseItem:(int) index;
+- (int) getItemsCount;
 
-- (CGPoint) getFirstPos;
+- (CGPoint) getStartPos;
+- (CGPoint) getFirstVisiblePos;
 
-- (CGPoint) getLastPos;
+- (CGPoint) getLastVisiblePos;
+
+- (CGPoint) getEndPos;
+
+- (int) getFirstVisibleIndex;
+
+- (int) getLastVisibleIndex;
 
 - (bool) isTopCanAddItemInScreen:(int) topOffset;
 
 - (bool) isBottomCanAddItemInScreen:(int) bottomOffset;
+
+- (void) scrollUptoPosY:(int) offsetY;
+
+- (void) scrollDowntoPosY:(int) offsetY;
 
 @end

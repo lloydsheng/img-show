@@ -12,6 +12,7 @@
 @synthesize topLeftPos;
 @synthesize bottomLeftPos;
 @synthesize itemView;
+@synthesize itemIndex;
 
 - (id) initWithFrame:(CGRect) frame withIndex:(int) index
 {

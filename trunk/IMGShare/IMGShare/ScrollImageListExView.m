@@ -15,12 +15,15 @@
 @interface ScrollImageListExView(Private)
 - (void) confiyArr:(NSMutableArray*) array withLimit:(int) count;
 - (CGSize) GetSizeInView:(CGSize) orgialSize;
-- (ColumnItemsList*) getNextPosColumn;
-- (ColumnItemsList*) getPrePosColumn;
+- (ColumnItemsList*) getNextVisiblePosColumn;
+- (ColumnItemsList*) getPreVisiblePosColumn;
+
+- (ColumnItemsList*) getNextInitPosColumn;
 
 @end
 
 @implementation ScrollImageListExView
+@synthesize imageDelegate;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -31,7 +34,7 @@
     return self;
 }
 
-- (id) initWithFrame:(CGRect)frame withColumn:(int) column
+- (ScrollImageListExView*) initWithFrame:(CGRect)frame withColumn:(int) column
 {
     [self initWithFrame:frame];
     if (column == 0)
@@ -52,9 +55,13 @@
     itemWidth = (self.bounds.size.width - itemCountEachRow * (eachItemWidGrap + 1)) / itemCountEachRow;
     
     allItemsColumn = [[NSMutableArray alloc] initWithCapacity:column];
+    int offsetX = eachItemWidGrap;
     for (int index = 0; index < column; index++)
     {
-        [allItemsColumn addObject:[[ColumnItemsList alloc] init:self withWidth:itemWidth]];
+        ColumnItemsList* subList = [[ColumnItemsList alloc] init:self withWidth:itemWidth offset: offsetX];
+        [allItemsColumn addObject: subList];
+        [subList release];
+        offsetX = offsetX + eachItemWidGrap + itemWidth;
     }
     
     return self;
@@ -67,11 +74,12 @@
     for (int itemIndex = 0; itemIndex < [imageDelegate GetItemsCount]; itemIndex++) 
     {
         
-        ColumnItemsList* list = [self getNextPosColumn];
+        ColumnItemsList* list = [self getNextInitPosColumn];
         if (list)
         {
             BlogDataItem* itemData = (BlogDataItem*)[imageDelegate GetImageItem:itemIndex];
             [list initSubItem: itemData withIndex:itemIndex];
+            NSLog(@"current all list index = %d\r\n", itemIndex);
         }
     }
 }
@@ -100,7 +108,7 @@
     return CGSizeMake(itemWidth, itemHeight);
 }
 
-- (ColumnItemsList*) getNextPosColumn
+- (ColumnItemsList*) getNextVisiblePosColumn
 {
     if (allItemsColumn.count ==0)
     {
@@ -109,23 +117,25 @@
     int offsetY = 0;
     int index = 0;
     int lastIndex = 0;
-    for (; index < allItemsColumn; index++) {
+    for (; index < allItemsColumn.count; index++) {
         ColumnItemsList* item = [allItemsColumn objectAtIndex: index];
-        if (index == 0) 
+        if ([item getItemsCount] == 0) 
         {
-            offsetY = [item getLastPos].y;
-            lastIndex = 0;
+            offsetY = [item getLastVisiblePos].y;
+            lastIndex = index;
+            break;
         }
-        else if ([item getLastPos].y < offsetY)
+        else if ([item getLastVisiblePos].y < offsetY || index == 0)
         {
-            offsetY = [item getLastPos].y;
+            offsetY = [item getLastVisiblePos].y;
             lastIndex = index;
         }
     }
+    NSLog(@"current list index = %d", lastIndex);
     return [allItemsColumn objectAtIndex:lastIndex];
 }
 
-- (ColumnItemsList*) getPrePosColumn
+- (ColumnItemsList*) getPreVisiblePosColumn
 {
     if (allItemsColumn.count ==0)
     {
@@ -134,16 +144,16 @@
     int offsetY = 0;
     int index = 0;
     int lastIndex = 0;
-    for (; index < allItemsColumn; index++) {
+    for (; index < allItemsColumn.count; index++) {
         ColumnItemsList* item = [allItemsColumn objectAtIndex: index];
         if (index == 0) 
         {
-            offsetY = [item getLastPos].y;
+            offsetY = [item getFirstVisiblePos].y;
             lastIndex = 0;
         }
-        else if ([item getLastPos].y > offsetY)
+        else if ([item getFirstVisiblePos].y > offsetY)
         {
-            offsetY = [item getLastPos].y;
+            offsetY = [item getFirstVisiblePos].y;
             lastIndex = index;
         }
     }
@@ -159,7 +169,7 @@
 
 - (int) getBottomCacheOffset
 {
-    return hightNextCache;
+    return hightNextCache + self.frame.size.height;
 }
 - (ScrollImageItem*) getSubImageItem
 {
@@ -173,9 +183,18 @@
     else
     {
         ScrollImageItem* item = [[ScrollImageItem alloc] initWithFrame:CGRectZero delegate:self];
+        [self addSubview:item];
         return [item autorelease];
     }
     
+}
+
+- (id) getSubDataItem:(int) allListIndex
+{
+    if (allListIndex < [imageDelegate GetItemsCount]) {
+        return [imageDelegate GetImageItem:allListIndex];
+    }
+    return nil;
 }
 
 - (void) releaseSubImageItem:(ScrollImageItem*) imageItem
@@ -186,6 +205,55 @@
         [reuseList addObject:imageItem];
     }
 }
+
+- (ColumnItemsList*) getNextInitPosColumn;
+{
+    if (allItemsColumn.count ==0)
+    {
+        return nil;
+    }
+    int offsetY = 0;
+    int index = 0;
+    int lastIndex = 0;
+    for (; index < allItemsColumn.count; index++) {
+        ColumnItemsList* item = [allItemsColumn objectAtIndex: index];
+        if ([item getItemsCount] == 0) 
+        {
+            offsetY = [item getEndPos].y;
+            lastIndex = index;
+            break;
+        }
+        else if ([item getEndPos].y < offsetY || index == 0)
+        {
+            offsetY = [item getEndPos].y;
+            lastIndex = index;
+        }
+    }
+    NSLog(@"current list index = %d", lastIndex);
+    return [allItemsColumn objectAtIndex:lastIndex];
+}
+
+- (void) updateVisibleListWhenScroll2Down
+{
+    if([imageDelegate  GetItemsCount]== 0)
+        return;
+    
+    NSMutableArray* delArr = [[NSMutableArray alloc] initWithCapacity:3];
+    for (int index = 0; index < allItemsColumn.count; index ++) 
+    {
+        ColumnItemsList* list = [allItemsColumn objectAtIndex:index];
+        
+        [list scrollDowntoPosY:self.contentOffset.y];
+    }
+
+
+}
+
+- (void) updateVisibleListWhenScroll2Up
+{
+
+}
+
 
 - (void) btPressed
 {

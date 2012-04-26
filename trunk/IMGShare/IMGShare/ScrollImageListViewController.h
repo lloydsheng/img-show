@@ -7,13 +7,17 @@
 //
 
 #import "ScrollImageListExView.h"
+#import "ScrollImageListView.h"
 
 @interface ScrollImageListViewController : UIViewController<ScrollImageListViewDelegate, UIScrollViewDelegate>
 {
     //NSMutableArray*     imageDataList;
-    ScrollImageListExView*    imageListView;
+    //ScrollImageListExView*    imageListView;
+    
     //上一次scrollview y偏移量
     int                 lastOffsetY;
+    
+    ScrollImageListExView*   list;
 }
 
 @end

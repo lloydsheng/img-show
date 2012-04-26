@@ -29,6 +29,14 @@
     
 }
 
+@property (nonatomic, assign) id imageDelegate;
+
+- (ScrollImageListExView*) initWithFrame:(CGRect)frame withColumn:(int) column;
+
+- (void) updateVisibleListWhenScroll2Down;
+
+- (void) updateVisibleListWhenScroll2Up;
+
 - (void) config;
 
 @end
