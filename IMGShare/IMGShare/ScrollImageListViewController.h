@@ -17,7 +17,7 @@
     //上一次scrollview y偏移量
     int                 lastOffsetY;
     
-    ScrollImageListExView*   list;
+    ScrollImageListExView*   imageListView;
 }
 
 @end

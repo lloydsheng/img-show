@@ -34,8 +34,12 @@
 - (id) init:(id) delegate withWidth:(int) columnWid offset:(int) posX;
 - (void) initSubItem:(BlogDataItem*) dataItem withIndex:(int) index;
 - (void) configItem:(BlogDataItem*) dataItem withIndex:(int) index;
-- (void) configItemBefore:(BlogDataItem*) dataItem withIndex:(int) index;
+- (void) configNextItem:(BlogDataItem*) dataItem;
+- (void) configPreItem:(BlogDataItem*) dataItem;
+//- (void) configItemBefore:(BlogDataItem*) dataItem withIndex:(int) index;
 - (void) releaseItem:(int) index;
+- (void) releaseFirstItem;
+- (void) releaseLastItem;
 - (int) getItemsCount;
 
 - (CGPoint) getStartPos;
@@ -45,9 +49,9 @@
 
 - (CGPoint) getEndPos;
 
-- (int) getFirstVisibleIndex;
+- (int) getBeforeFirstVisibleIndex;
 
-- (int) getLastVisibleIndex;
+- (int) getAfterLastVisibleIndex;
 
 - (bool) isTopCanAddItemInScreen:(int) topOffset;
 

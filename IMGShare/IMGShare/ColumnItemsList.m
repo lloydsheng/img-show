@@ -73,7 +73,7 @@
             if ([item isNoItemView])
             {
                 ScrollImageItem* imageItem = [delegate getSubImageItem];
-                imageItem.hidden = NO;
+                
                 NSString* url = [UtilsModel GetFullBlogUrlStr:dataItem.pic_pid withImgType:EImageThumb];
                 [imageItem config:url withIndex:itemIndex];
                 
@@ -88,38 +88,82 @@
     }
 }
 
-- (void) configItemBefore:(BlogDataItem*) dataItem withIndex:(int) itemIndex
+- (void) configNextItem:(BlogDataItem*) dataItem
 {
-    for (int index = 0; index < itemsList.count; index++)
+    if(endIndex + 1 < itemsList.count)
     {
-        ColumnItem* item = [itemsList objectAtIndex:index];
-        if (itemIndex == [item getItemIndex]) 
+        CGPoint pos = [self getLastVisiblePos];
+        endIndex++;
+        ColumnItem* item = [itemsList objectAtIndex:endIndex];
+        if ([item isNoItemView])
         {
-            if ([item isNoItemView])
-            {
-                ScrollImageItem* imageItem = [delegate getSubImageItem];
-                imageItem.hidden = NO;
-                NSString* url = [UtilsModel GetFullBlogUrlStr:dataItem.pic_pid withImgType:EImageThumb];
-                [imageItem config:url withIndex:itemIndex];
-                
-                [item configItem:imageItem];
-                if (startIndex > 0)
-                {
-                    startIndex--;
-                }                
-            }
-            break;
+            ScrollImageItem* imageItem = [delegate getSubImageItem];
+            int columnHeight = [self getItemHeightInList:[dataItem getSize]];
+            imageItem.frame = CGRectMake(pos.x, pos.y, columnWidth, columnHeight);
+            
+            NSString* url = [UtilsModel GetFullBlogUrlStr:dataItem.pic_pid withImgType:EImageThumb];
+            [imageItem config:url withIndex:endIndex];
+            [imageItem setBackgroundColor:[UIColor blueColor]];
+            [item configItem:imageItem];
+               
         }
     }
 }
 
+- (void) configPreItem:(BlogDataItem*) dataItem
+{
+    if(startIndex > 0)
+    {
+        CGPoint pos = [self getFirstVisiblePos];
+        startIndex--;
+        ColumnItem* item = [itemsList objectAtIndex:startIndex];
+        if ([item isNoItemView])
+        {
+            ScrollImageItem* imageItem = [delegate getSubImageItem];
+            int columnHeight = [self getItemHeightInList:[dataItem getSize]];
+            imageItem.frame = CGRectMake(pos.x, pos.y, columnWidth, columnHeight);
+            
+            NSString* url = [UtilsModel GetFullBlogUrlStr:dataItem.pic_pid withImgType:EImageThumb];
+            [imageItem config:url withIndex:endIndex];
+            [imageItem setBackgroundColor:[UIColor blueColor]];
+            [item configItem:imageItem];
+            
+        }
+    }
+}
+
+//- (void) configItemBefore:(BlogDataItem*) dataItem withIndex:(int) itemIndex
+//{
+//    for (int index = 0; index < itemsList.count; index++)
+//    {
+//        ColumnItem* item = [itemsList objectAtIndex:index];
+//        if (itemIndex == [item getItemIndex]) 
+//        {
+//            if ([item isNoItemView])
+//            {
+//                ScrollImageItem* imageItem = [delegate getSubImageItem];
+//                
+//                NSString* url = [UtilsModel GetFullBlogUrlStr:dataItem.pic_pid withImgType:EImageThumb];
+//                [imageItem config:url withIndex:itemIndex];
+//                
+//                [item configItem:imageItem];
+//                if (startIndex > 0)
+//                {
+//                    startIndex--;
+//                }                
+//            }
+//            break;
+//        }
+//    }
+//}
+
 - (void) releaseItem:(int) itemIndex
 {
-    ColumnItem* item = [itemsList objectAtIndex:index];
+    ColumnItem* item = [itemsList objectAtIndex:itemIndex];
 
     for (int index = 0; index < itemsList.count; index++)
     {
-        if (itemIndex == [itemsList objectAtIndex:index])
+        if (itemIndex == [item getItemIndex])
         {
             [delegate releaseSubImageItem:item.itemView];
             [item releaseItem];
@@ -128,6 +172,38 @@
                 startIndex--;
             }
             break;
+        }
+    }
+}
+
+- (void) releaseFirstItem
+{
+    if (startIndex >= 0 && startIndex < itemsList.count)
+    {
+        ColumnItem* item = [itemsList objectAtIndex:startIndex];
+        [delegate releaseSubImageItem:item.itemView];
+        [item releaseItem];
+        if (startIndex + 1 < itemsList.count) {
+            startIndex ++;
+        }
+        else {
+            startIndex = 0;
+        }
+    }
+}
+
+- (void) releaseLastItem
+{
+    if (endIndex >= 0 && endIndex < itemsList.count)
+    {
+        ColumnItem* item = [itemsList objectAtIndex:endIndex];
+        [delegate releaseSubImageItem:item.itemView];
+        [item releaseItem];
+        if (endIndex + 1 < itemsList.count) {
+            endIndex--;
+        }
+        else {
+            startIndex = 0;
         }
     }
 }
@@ -177,10 +253,10 @@
     }
 }
 
-- (int) getFirstVisibleIndex
+- (int) getBeforeFirstVisibleIndex
 {
-    if (startIndex < itemsList.count) {
-        ColumnItem* item = [itemsList objectAtIndex:startIndex];
+    if (startIndex - 1 < itemsList.count) {
+        ColumnItem* item = [itemsList objectAtIndex:startIndex - 1];
         return item.itemIndex;
     }
     else {
@@ -188,10 +264,10 @@
     }
 }
 
-- (int) getLastVisibleIndex
+- (int) getAfterLastVisibleIndex
 {
-    if (startIndex < itemsList.count) {
-        ColumnItem* item = [itemsList objectAtIndex:startIndex];
+    if (endIndex + 1 < itemsList.count) {
+        ColumnItem* item = [itemsList objectAtIndex:endIndex + 1];
         return item.itemIndex;
     }
     else {
@@ -238,9 +314,15 @@
     {
         if (offsetY - preCacheHeight < [self getFirstVisiblePos].y) 
         {
-            int dataIndex = [self getFirstVisibleIndex];
+            int dataIndex = [self getBeforeFirstVisibleIndex];
+            if (dataIndex == -1)
+            {
+                return;
+            }
+            
             BlogDataItem* data = [delegate getSubDataItem:dataIndex];
-            [self configItemBefore:data withIndex:dataIndex];
+            //[self configItemBefore:data withIndex:dataIndex];
+            [self configPreItem:data];
         }
         else {
             break;
@@ -252,8 +334,9 @@
     {
         if (offsetY + botCacheHeight < [self getLastVisiblePos].y) 
         {
-            int dataIndex = [self getLastVisibleIndex];
-            [self releaseItem:dataIndex];
+//            int dataIndex = [self getLastVisibleIndex];
+//            [self releaseItem:dataIndex];
+            [self releaseLastItem];
         }
         else {
             break;
@@ -272,9 +355,13 @@
     {
         if (offsetY + botCacheHeight > [self getLastVisiblePos].y) 
         {
-            int dataIndex = [self getLastVisibleIndex];
+            int dataIndex = [self getAfterLastVisibleIndex];
+            if (dataIndex == -1) {
+                return;
+            }
             BlogDataItem* data = [delegate getSubDataItem:dataIndex];
-            [self configItem:data withIndex:dataIndex];
+//            [self configItem:data withIndex:dataIndex];
+            [self configNextItem:data];
         }
         else {
             break;
@@ -286,10 +373,11 @@
     {
         if (offsetY - preCacheHeight > [self getFirstVisiblePos].y) 
         {
-            int dataIndex = [self getFirstVisibleIndex];
-            //BlogDataItem* data = [delegate getSubDataItem:dataIndex];
-            //[self configItemBefore:data withIndex:dataIndex];
-            [self releaseItem:dataIndex];
+//            int dataIndex = [self getFirstVisibleIndex];
+//            //BlogDataItem* data = [delegate getSubDataItem:dataIndex];
+//            //[self configItemBefore:data withIndex:dataIndex];
+//            [self releaseItem:dataIndex];
+            [self releaseFirstItem];
         }
         else {
             break;
