@@ -82,6 +82,13 @@
             NSLog(@"current all list index = %d\r\n", itemIndex);
         }
     }
+    
+    int offset = [[self getNextInitPosColumn] getEndPos].y;
+    if(offset !=0)
+    {
+        self.contentSize = CGSizeMake(self.frame.size.width, MAX(offset, self.frame.size.height));
+    }
+
 }
 
 - (void) configImage:(ScrollImageItem*) scrollItem withIndex:(int) itemIndex withPos:(CGPoint) pos
@@ -238,7 +245,6 @@
     if([imageDelegate  GetItemsCount]== 0)
         return;
     
-    NSMutableArray* delArr = [[NSMutableArray alloc] initWithCapacity:3];
     for (int index = 0; index < allItemsColumn.count; index ++) 
     {
         ColumnItemsList* list = [allItemsColumn objectAtIndex:index];
@@ -251,7 +257,15 @@
 
 - (void) updateVisibleListWhenScroll2Up
 {
-
+    if([imageDelegate  GetItemsCount]== 0)
+        return;
+    
+    for (int index = 0; index < allItemsColumn.count; index ++) 
+    {
+        ColumnItemsList* list = [allItemsColumn objectAtIndex:index];
+        
+        [list scrollUptoPosY:self.contentOffset.y];
+    }
 }
 
 
