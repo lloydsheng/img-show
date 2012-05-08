@@ -31,6 +31,9 @@
     int     columnXPos;
 }
 
+@property (nonatomic, assign) int startIndex;
+@property (nonatomic, assign) int endIndex;
+
 - (id) init:(id) delegate withWidth:(int) columnWid offset:(int) posX;
 - (void) initSubItem:(BlogDataItem*) dataItem withIndex:(int) index;
 - (void) configItem:(BlogDataItem*) dataItem withIndex:(int) index;
@@ -43,9 +46,12 @@
 - (int) getItemsCount;
 
 - (CGPoint) getStartPos;
-- (CGPoint) getFirstVisiblePos;
 
-- (CGPoint) getLastVisiblePos;
+- (CGPoint) getFirstVisibleTLPos;
+- (CGPoint) getFirstVisibleBLPos;
+
+- (CGPoint) getLastVisibleTLPos;
+- (CGPoint) getLastVisibleBLPos;
 
 - (CGPoint) getEndPos;
 

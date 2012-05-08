@@ -10,6 +10,9 @@
 #import "WBEngine.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
+{
+    int lastIndex;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) UIViewController* rootController;

@@ -26,6 +26,8 @@ static const int KGridItemHeight = 60;
 
 static const int kGridItemCountEachRow = 4;
 
+static const int kImageItemGrapHeight = 10;
+
 static NSString* KBlogImgServerUrl = @"http://ww1.sinaimg.cn/";
 typedef enum  
 {
