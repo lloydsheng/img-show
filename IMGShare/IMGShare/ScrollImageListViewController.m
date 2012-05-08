@@ -19,6 +19,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+
     }
     return self;
 }
@@ -38,6 +39,8 @@
 - (void)loadView
 {
     [super loadView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hotBlogUpdateNotify:) name:KHotBlogUpdateNotify object:nil];
     
     CGRect rect = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 60);//应可以用属性设置
     imageListView = [[ScrollImageListExView alloc] initWithFrame:rect withColumn:kGridItemCountEachRow];
@@ -125,19 +128,40 @@
 #pragma UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if(scrollView.contentOffset.y > lastOffsetY)
+    if(scrollView.contentOffset.y - lastOffsetY > 10 && scrollView.contentOffset.y > 0)
     {
         [imageListView updateVisibleListWhenScroll2Down];
+        
+        if ([HotBlogDataModel shareInstance].isActive == NO
+            && scrollView.contentSize.height - scrollView.contentOffset.y - self.view.frame.size.height < 200) 
+        {
+            [[HotBlogDataModel shareInstance] requestDataWithType:KRequestNextPage];
+        }
 
     }
-    else if(scrollView.contentOffset.y < lastOffsetY)
+    else if(10 < lastOffsetY - scrollView.contentOffset.y && scrollView.contentOffset.y < scrollView.contentSize.height - scrollView.frame.size.height)
     {
         [imageListView updateVisibleListWhenScroll2Up];
+
+    }
+    else if(scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.size.height)
+    {
+        
 
     }
     lastOffsetY = scrollView.contentOffset.y;
     //NSLog(@"current offset %d", lastOffsetY);
 }
 
+- (void) hotBlogUpdateNotify:(NSNotification*) notify
+{
+    
+}
+
+- (void) dealloc
+{
+    [imageListView release];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:KHotBlogUpdateNotify object:nil];
+}
 
 @end

@@ -129,6 +129,7 @@
     tabBarController.view.frame = CGRectMake(0, 0, rootController.view.bounds.size.width, rootController.view.bounds.size.height);
     [rootController.view addSubview:tabBarController.view];
     
+    lastIndex = 0;
     
     [viewC release];
     [viewC2 release];
@@ -168,5 +169,40 @@
     }
     
 }
+- (void)tabBarController:(UITabBarController *)curtabBarController didSelectViewController:(UIViewController *)viewController
+{
+    
+    //[UIView beginAnimations:nil context:nil];
+    //[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+    //[UIView setAnimationTransition:UIViewAnimationOptionTransitionCrossDissolve forView:curtabBarController.view cache:YES];
+    //[UIView setAnimationDuration:1];
+    //[curtabBarController.view bringSubviewToFront:viewController.view];
+    //[UIView transitionFromView:curtabBarController.selectedViewController.view toView:viewController.view duration:0.7 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished){}];
 
+    //[UIView commitAnimations];
+
+    CATransition* tran = [CATransition animation];
+    tran.duration = 0.5;
+    tran.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    //    NSString *moreTypes[]={@"cube",@"suckEffect",@"oglFlip",@"rippleEffect",@"pageCurl",@"pageUnCurl",@"cameraIrisHollowOpen",@"cameraIrisHollowClose"};
+    //	
+	//NSString *types[4] = {kCATransitionMoveIn, kCATransitionPush, kCATransitionReveal, kCATransitionFade};
+	//NSString *subtypes[4] = {kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom};
+    tran.type = kCATransitionPush;
+    if (curtabBarController.selectedIndex > lastIndex)
+    {
+        tran.subtype = kCATransitionFromRight;
+
+    }
+    else if(curtabBarController.selectedIndex < lastIndex)
+    {
+        tran.subtype = kCATransitionFromLeft;
+    }
+    lastIndex = curtabBarController.selectedIndex;
+    
+    [curtabBarController.view.layer addAnimation:tran forKey:nil];
+    [curtabBarController.view bringSubviewToFront:viewController.view];
+    
+    //return YES;
+}
 @end

@@ -12,6 +12,9 @@
 
 const int kDefHotBlogNumPerPage = 50;
 
+@interface HotBlogDataModel(Private)
+- (bool) checkItemIsUseful:(NSDictionary*) item;
+@end
 @implementation HotBlogDataModel
 
 @synthesize hotBlogArray;
@@ -19,6 +22,7 @@ const int kDefHotBlogNumPerPage = 50;
 @synthesize isActive;
 @synthesize delegate;
 @synthesize typeList;
+
 
 + (HotBlogDataModel*) shareInstance
 {
@@ -95,7 +99,7 @@ const int kDefHotBlogNumPerPage = 50;
     NSMutableDictionary* para = [[NSMutableDictionary alloc] initWithCapacity:3];
     [para setObject:@"1" forKey:@"type"];
     [para setObject:@"1" forKey:@"is_pic"];
-    [para setObject:@"40" forKey:@"count"];
+    [para setObject:@"100" forKey:@"count"];
     [engine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil];
     isActive = YES;
     
@@ -154,15 +158,30 @@ const int kDefHotBlogNumPerPage = 50;
                 [hotBlogArray removeAllObjects];
                 needResetList = NO;
             }
-            for (NSDictionary* item in statuses) {
-                BlogDataItem* dataItem = [[BlogDataItem alloc] initWithDic:item];
-                [self.hotBlogArray addObject:dataItem];
-                [dataItem release];
+            
+            NSMutableArray* delList = [[NSMutableArray alloc] initWithCapacity:4];
+            for (NSDictionary* item in statuses) 
+            {
+                if([self checkItemIsUseful: item])
+                {
+                    BlogDataItem* dataItem = [[BlogDataItem alloc] initWithDic:item];
+                    [self.hotBlogArray addObject:dataItem];
+                    [dataItem release];
+                }
+                else
+                {
+                    [delList addObject:item];
+                }
             }
+            
+            [statuses removeObjectsInArray:delList];
+            [delList release];
+            
             if (hotBlogArray.count > 0) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:KHotBlogUpdateNotify object:nil];
                 currentPageIndex ++;
             }
+
         }
         
     }
@@ -174,7 +193,7 @@ const int kDefHotBlogNumPerPage = 50;
     NSMutableDictionary* para = [[NSMutableDictionary alloc] initWithCapacity:3];
     [para setObject:@"3" forKey:@"type"];
     [para setObject:@"1" forKey:@"is_pic"];
-    [para setObject:@"40" forKey:@"count"];
+    [para setObject:@"100" forKey:@"count"];
     
     if(requestType == KRequestNextPage)
     {
@@ -209,6 +228,22 @@ const int kDefHotBlogNumPerPage = 50;
     [wbEngine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil];
     isActive = YES;
     [para release];
+}
+
+- (bool) checkItemIsUseful:(NSDictionary*) item
+{
+    NSString* widStr = [item objectForKey:@"pwidth"];
+    NSString* heightStr = [item objectForKey:@"pheight"];
+    if (widStr && heightStr) 
+    {
+        int wid = [widStr intValue];
+        int height = [heightStr intValue];
+        if (wid != 0 && height / wid <= 2) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (void) dealloc

@@ -19,6 +19,7 @@
 - (ColumnItemsList*) getPreVisiblePosColumn;
 
 - (ColumnItemsList*) getNextInitPosColumn;
+- (int) getListHeight;
 
 @end
 
@@ -79,11 +80,11 @@
         {
             BlogDataItem* itemData = (BlogDataItem*)[imageDelegate GetImageItem:itemIndex];
             [list initSubItem: itemData withIndex:itemIndex];
-            NSLog(@"current all list index = %d\r\n", itemIndex);
+            //NSLog(@"current all list index = %d\r\n", itemIndex);
         }
     }
     
-    int offset = [[self getNextInitPosColumn] getEndPos].y;
+    int offset = [self getListHeight];//[[self getNextInitPosColumn] getEndPos].y;
     if(offset !=0)
     {
         self.contentSize = CGSizeMake(self.frame.size.width, MAX(offset, self.frame.size.height));
@@ -112,6 +113,7 @@
 - (CGSize) GetSizeInView:(CGSize) orgialSize
 {
     int itemHeight = orgialSize.height * itemWidth / (orgialSize.width ? orgialSize.width : 300);
+    //itemHeight += kImageItemGrapHeight;
     return CGSizeMake(itemWidth, itemHeight);
 }
 
@@ -128,17 +130,17 @@
         ColumnItemsList* item = [allItemsColumn objectAtIndex: index];
         if ([item getItemsCount] == 0) 
         {
-            offsetY = [item getLastVisiblePos].y;
+            offsetY = [item getLastVisibleBLPos].y;
             lastIndex = index;
             break;
         }
-        else if ([item getLastVisiblePos].y < offsetY || index == 0)
+        else if ([item getLastVisibleBLPos].y < offsetY || index == 0)
         {
-            offsetY = [item getLastVisiblePos].y;
+            offsetY = [item getLastVisibleBLPos].y;
             lastIndex = index;
         }
     }
-    NSLog(@"current list index = %d", lastIndex);
+   // NSLog(@"current list index = %d", lastIndex);
     return [allItemsColumn objectAtIndex:lastIndex];
 }
 
@@ -155,12 +157,12 @@
         ColumnItemsList* item = [allItemsColumn objectAtIndex: index];
         if (index == 0) 
         {
-            offsetY = [item getFirstVisiblePos].y;
+            offsetY = [item getFirstVisibleTLPos].y;
             lastIndex = 0;
         }
-        else if ([item getFirstVisiblePos].y > offsetY)
+        else if ([item getFirstVisibleTLPos].y > offsetY)
         {
-            offsetY = [item getFirstVisiblePos].y;
+            offsetY = [item getFirstVisibleTLPos].y;
             lastIndex = index;
         }
     }
@@ -184,6 +186,7 @@
     {
         ScrollImageItem* item = [reuseList objectAtIndex:0];
         [item retain];
+        item.hidden = NO;
         [reuseList removeObjectAtIndex:0];
         return [item autorelease];
     }
@@ -236,8 +239,27 @@
             lastIndex = index;
         }
     }
-    NSLog(@"current list index = %d", lastIndex);
+    //NSLog(@"current list index = %d", lastIndex);
     return [allItemsColumn objectAtIndex:lastIndex];
+}
+
+- (int) getListHeight
+{
+    if (allItemsColumn.count ==0)
+    {
+        return 0;
+    }
+    int offsetY = 0;
+    int index = 0;
+    for (; index < allItemsColumn.count; index++) {
+        ColumnItemsList* item = [allItemsColumn objectAtIndex: index];
+        if([item getEndPos].y > offsetY)
+        {
+            offsetY = [item getEndPos].y;
+        }
+    }
+    return offsetY;
+
 }
 
 - (void) updateVisibleListWhenScroll2Down
@@ -250,8 +272,10 @@
         ColumnItemsList* list = [allItemsColumn objectAtIndex:index];
         
         [list scrollDowntoPosY:self.contentOffset.y];
+        
+         NSLog(@"scroll down, colum%d start=%d end=%d count=%d", index, list.startIndex, list.endIndex, list.endIndex, [list getItemsCount]);
     }
-
+    NSLog(@"\r\n\r\n");
 
 }
 
@@ -265,13 +289,43 @@
         ColumnItemsList* list = [allItemsColumn objectAtIndex:index];
         
         [list scrollUptoPosY:self.contentOffset.y];
+        
+        NSLog(@"scroll up, colum%d start=%d end=%d count= %d", index, list.startIndex, list.endIndex, [list getItemsCount]);
     }
+    NSLog(@"\r\n\r\n");
 }
 
 
-- (void) btPressed
+- (void) btPressed:(id) sender
 {
+    UIView* view = (UIView*)sender;
+    int index = view.tag;
     
+    if (index < [imageDelegate GetItemsCount])
+    {
+        BlogDataItem* itemData = (BlogDataItem*)[imageDelegate GetImageItem:index];
+        if (imgDisplay == nil) 
+        {
+            imgDisplay = [[UIImageView alloc] init];
+            [self addSubview:imgDisplay];
+        }
+        NSString* imgUrl = [UtilsModel GetFullBlogUrlStr:itemData.pic_pid withImgType:EImageMiddle];
+        [imgDisplay setImageWithURL:[NSURL URLWithString:imgUrl]];
+        imgDisplay.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
+        imgDisplay.center = self.center;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        int width = [itemData.pic_pwidth intValue];
+        int height = [itemData.pic_pheight intValue];
+        imgDisplay.frame = CGRectMake(0, 0, width, height);
+        imgDisplay.center = self.center;
+        
+        [UIView commitAnimations];
+
+    }
+
 }
 
 

@@ -11,6 +11,8 @@
 #import "UtilsModel.h"
 
 @implementation ColumnItemsList
+@synthesize startIndex;
+@synthesize endIndex;
 
 - (id) init:(id) listDelegate withWidth:(int) columnWid offset:(int) posX
 {
@@ -46,7 +48,7 @@
         endIndex = [itemsList count] - 1;
         [column release];
         
-        NSLog(@"visible item index = %d", index);
+       // NSLog(@"visible item index = %d", index);
         
     }
     else
@@ -58,7 +60,7 @@
         [itemsList addObject:column];
         [column release];
         
-        NSLog(@"not visible item index = %d", index);
+        //NSLog(@"not visible item index = %d", index);
 
     }
 }
@@ -92,7 +94,7 @@
 {
     if(endIndex + 1 < itemsList.count)
     {
-        CGPoint pos = [self getLastVisiblePos];
+        CGPoint pos = [self getLastVisibleBLPos];
         endIndex++;
         ColumnItem* item = [itemsList objectAtIndex:endIndex];
         if ([item isNoItemView])
@@ -114,14 +116,14 @@
 {
     if(startIndex > 0)
     {
-        CGPoint pos = [self getFirstVisiblePos];
+        CGPoint pos = [self getFirstVisibleTLPos];
         startIndex--;
         ColumnItem* item = [itemsList objectAtIndex:startIndex];
         if ([item isNoItemView])
         {
             ScrollImageItem* imageItem = [delegate getSubImageItem];
             int columnHeight = [self getItemHeightInList:[dataItem getSize]];
-            imageItem.frame = CGRectMake(pos.x, pos.y, columnWidth, columnHeight);
+            imageItem.frame = CGRectMake(pos.x, pos.y - columnHeight, columnWidth, columnHeight);
             
             NSString* url = [UtilsModel GetFullBlogUrlStr:dataItem.pic_pid withImgType:EImageThumb];
             [imageItem config:url withIndex:endIndex];
@@ -199,11 +201,11 @@
         ColumnItem* item = [itemsList objectAtIndex:endIndex];
         [delegate releaseSubImageItem:item.itemView];
         [item releaseItem];
-        if (endIndex + 1 < itemsList.count) {
+        if (endIndex > 0) {
             endIndex--;
         }
         else {
-            startIndex = 0;
+            endIndex = 0;
         }
     }
 }
@@ -218,7 +220,7 @@
     return CGPointMake(columnXPos, 0);
 }
 
-- (CGPoint) getFirstVisiblePos
+- (CGPoint) getFirstVisibleTLPos
 {
     if (startIndex < itemsList.count) {
         ColumnItem* item = [itemsList objectAtIndex:startIndex];
@@ -229,11 +231,33 @@
     }
 }
 
-- (CGPoint) getLastVisiblePos
+- (CGPoint) getFirstVisibleBLPos
+{
+    if (startIndex < itemsList.count) {
+        ColumnItem* item = [itemsList objectAtIndex:startIndex];
+        return item.bottomLeftPos;
+    }
+    else {
+        return CGPointMake(columnXPos, 0);
+    }
+}
+
+- (CGPoint) getLastVisibleBLPos
 {
     if (endIndex < itemsList.count) {
         ColumnItem* item = [itemsList objectAtIndex:endIndex];
         return item.bottomLeftPos;
+    }
+    else {
+        return CGPointMake(columnXPos, 0);
+    }
+}
+
+- (CGPoint) getLastVisibleTLPos
+{
+    if (endIndex < itemsList.count) {
+        ColumnItem* item = [itemsList objectAtIndex:endIndex];
+        return item.topLeftPos;
     }
     else {
         return CGPointMake(columnXPos, 0);
@@ -277,7 +301,7 @@
 
 - (bool) isTopCanAddItemInScreen:(int) topOffset
 {
-    if (itemsList.count == 0 || [self getFirstVisiblePos].y > topOffset)
+    if (itemsList.count == 0 || [self getFirstVisibleTLPos].y > topOffset)
     {
         return YES;
     }
@@ -288,7 +312,7 @@
 
 - (bool) isBottomCanAddItemInScreen:(int) bottomOffset
 {
-    if (itemsList.count == 0 || [self getLastVisiblePos].y < bottomOffset)
+    if (itemsList.count == 0 || [self getLastVisibleBLPos].y < bottomOffset)
     {
         return YES;
     }
@@ -312,7 +336,7 @@
     int preCacheHeight = [delegate getTopCacheOffset];
     for (int index = startIndex; startIndex>=0; index--)
     {
-        if (offsetY - preCacheHeight < [self getFirstVisiblePos].y) 
+        if (offsetY - preCacheHeight < [self getFirstVisibleBLPos].y) 
         {
             int dataIndex = [self getBeforeFirstVisibleIndex];
             if (dataIndex == -1)
@@ -332,7 +356,7 @@
     int botCacheHeight = [delegate getBottomCacheOffset];
     for (int index = endIndex; index < itemsList.count; index++)
     {
-        if (offsetY + botCacheHeight < [self getLastVisiblePos].y) 
+        if (offsetY + botCacheHeight < [self getLastVisibleTLPos].y) 
         {
 //            int dataIndex = [self getLastVisibleIndex];
 //            [self releaseItem:dataIndex];
@@ -353,7 +377,7 @@
     int botCacheHeight = [delegate getBottomCacheOffset];
     for (int index = endIndex; index < itemsList.count; index++)
     {
-        if (offsetY + botCacheHeight > [self getLastVisiblePos].y) 
+        if (offsetY + botCacheHeight > [self getLastVisibleTLPos].y) 
         {
             int dataIndex = [self getAfterLastVisibleIndex];
             if (dataIndex == -1) {
@@ -371,7 +395,7 @@
     int preCacheHeight = [delegate getTopCacheOffset];
     for (int index = startIndex; startIndex>=0; index--)
     {
-        if (offsetY - preCacheHeight > [self getFirstVisiblePos].y) 
+        if (offsetY - preCacheHeight > [self getFirstVisibleBLPos].y) 
         {
 //            int dataIndex = [self getFirstVisibleIndex];
 //            //BlogDataItem* data = [delegate getSubDataItem:dataIndex];

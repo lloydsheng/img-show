@@ -8,6 +8,7 @@
 
 #import "ScrollImageItem.h"
 #import "UIImageView+WebCache.h"
+#import "constDef.h"
 
 const int kImageWaitTag = 100;
 
@@ -29,6 +30,7 @@ const int kImageWaitTag = 100;
     if (wait == nil) {
         wait = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
         wait.tag = kImageWaitTag;
+        wait.center = self.center;
         [self addSubview:wait];
     }
     [wait startAnimating];
@@ -83,21 +85,23 @@ const int kImageWaitTag = 100;
 }
 @end
 
+
 @implementation ScrollImageItem
 @synthesize imageView;
 
 - (id)initWithFrame:(CGRect)frame delegate:(id) delegate
 {
-    self = [super initWithFrame:frame];
+    CGRect rect = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+    self = [super initWithFrame:rect];
     if (self) {
         self.backgroundColor = [UIColor grayColor];
         // Initialization code
         imageView = [[UIImageView alloc] initWithFrame: self.bounds];
-        imageView.backgroundColor = [UIColor blackColor];
+        imageView.backgroundColor = [UIColor darkGrayColor];
         
         [self addSubview:imageView];
         imageBt = [[UIButton alloc] initWithFrame: self.bounds];
-        [imageBt addTarget:delegate action:@selector(btPressed) forControlEvents:UIControlEventTouchUpInside];
+        [imageBt addTarget:delegate action:@selector(btPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:imageBt];
         
         imageTitle = [[ UILabel alloc] initWithFrame:CGRectZero];

@@ -26,6 +26,8 @@
     int eachItemWidGrap;
     
     id<ScrollImageListViewDelegate>                      imageDelegate;
+
+    UIImageView* imgDisplay;
     
 }
 

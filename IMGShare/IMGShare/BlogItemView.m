@@ -71,7 +71,7 @@
     {
         self.blogData = data;
 
-        NSString* fullImgUrl = [UtilsModel GetFullBlogUrlStr:data.pic_pid withImgType:EImageThumb];//EImageMiddle
+        NSString* fullImgUrl = [UtilsModel GetFullBlogUrlStr:data.pic_pid withImgType:EImageMiddle];//EImageMiddle
         [userView update:data.user.profile_image_url nick:data.user.name time:data.created_at];
         
         int imgHeight =  KBlogImgDefaultHeight;
