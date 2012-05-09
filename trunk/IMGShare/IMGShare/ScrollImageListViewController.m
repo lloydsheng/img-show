@@ -164,4 +164,57 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KHotBlogUpdateNotify object:nil];
 }
 
+- (void) onImgBtPressed:(id) sender
+{
+    UIView* view = (UIView*)sender;
+    int index = view.tag;
+    
+    if (index < [self GetItemsCount])
+    {
+        BlogDataItem* itemData = (BlogDataItem*)[self GetImageItem:index];
+        if (imgDisplay == nil) 
+        {
+            imgDisplay = [[UIImageView alloc] init];
+            [self.view addSubview:imgDisplay];
+            
+            imgBt = [UIButton buttonWithType:UIButtonTypeCustom];
+            [imgBt addTarget:self action:@selector(imgBtPressed:) forControlEvents:UIControlEventTouchUpInside];
+            imgBt.tag = 10;
+            [self.view addSubview:imgBt];
+        }
+        imgDisplay.hidden = NO;
+        NSString* imgUrl = [UtilsModel GetFullBlogUrlStr:itemData.pic_pid withImgType:EImageMiddle];
+        [imgDisplay setImageWithURL:[NSURL URLWithString:imgUrl]];
+        imgDisplay.frame = view.frame;//CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        int width = [itemData.pic_pwidth intValue];
+        int height = [itemData.pic_pheight intValue];
+        imgDisplay.frame = CGRectMake(0, 0, width, height);
+        imgDisplay.center = self.view.center;
+        
+        [UIView commitAnimations];
+        
+        imgBt.frame = imgDisplay.frame;
+        [self.view bringSubviewToFront:imgBt];
+        
+    }
+
+}
+
+- (void) imgBtPressed:(id) sender
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    imgDisplay.frame = CGRectMake(0, 0, 0, 0);
+    [UIView commitAnimations];
+    
+    imgBt.frame = imgDisplay.frame;
+    imgDisplay.image = nil;
+    imgDisplay.hidden = YES;
+    
+}
+
 @end

@@ -11,6 +11,7 @@
 #import "BlogDataItem.h"
 #import "UtilsModel.h"
 #import "ColumnItemsList.h"
+#import "UIImageView+WebCache.h"
 
 @interface ScrollImageListExView(Private)
 - (void) confiyArr:(NSMutableArray*) array withLimit:(int) count;
@@ -298,35 +299,10 @@
 
 - (void) btPressed:(id) sender
 {
-    UIView* view = (UIView*)sender;
-    int index = view.tag;
-    
-    if (index < [imageDelegate GetItemsCount])
-    {
-        BlogDataItem* itemData = (BlogDataItem*)[imageDelegate GetImageItem:index];
-        if (imgDisplay == nil) 
-        {
-            imgDisplay = [[UIImageView alloc] init];
-            [self addSubview:imgDisplay];
-        }
-        NSString* imgUrl = [UtilsModel GetFullBlogUrlStr:itemData.pic_pid withImgType:EImageMiddle];
-        [imgDisplay setImageWithURL:[NSURL URLWithString:imgUrl]];
-        imgDisplay.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
-        imgDisplay.center = self.center;
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        int width = [itemData.pic_pwidth intValue];
-        int height = [itemData.pic_pheight intValue];
-        imgDisplay.frame = CGRectMake(0, 0, width, height);
-        imgDisplay.center = self.center;
-        
-        [UIView commitAnimations];
-
-    }
-
+    [imageDelegate onImgBtPressed: sender];
 }
+
+
 
 
 @end

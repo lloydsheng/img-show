@@ -18,6 +18,8 @@
     int                 lastOffsetY;
     
     ScrollImageListExView*   imageListView;
+    UIImageView* imgDisplay;
+    UIButton*    imgBt;
 }
 
 @end
