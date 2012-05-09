@@ -126,6 +126,7 @@ const int kImageWaitTag = 100;
     [imageView startImgAnimating];
     [imageView setImageWithURL:[NSURL URLWithString:imgUrl]];
      self.tag = itemIndex;
+    imageBt.tag = itemIndex;
     self.hidden = NO;
 }
 
@@ -134,6 +135,7 @@ const int kImageWaitTag = 100;
     self.frame = CGRectZero;
     imageView.image = nil;
     self.tag = 0;
+    imageBt.tag = 0;
     self.hidden = YES;
 }
 

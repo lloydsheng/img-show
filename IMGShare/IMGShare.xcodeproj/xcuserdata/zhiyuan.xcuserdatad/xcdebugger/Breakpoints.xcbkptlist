@@ -231,34 +231,6 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "IMGShare/ColumnItemsList.m"
-         timestampString = "357268858.763984"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "199"
-         endingLineNumber = "199"
-         landmarkName = "-releaseLastItem"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "IMGShare/ColumnItemsList.m"
-         timestampString = "357467234.495586"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "121"
-         endingLineNumber = "121"
-         landmarkName = "-configPreItem:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "IMGShare/ColumnItemsList.m"
          timestampString = "357467442.97192"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
@@ -300,13 +272,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "IMGShare/AppDelegate.m"
-         timestampString = "358175225.903902"
+         filePath = "IMGShare/PhotoThirdViewController.m"
+         timestampString = "358254104.286728"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "175"
-         endingLineNumber = "175"
-         landmarkName = "-tabBarController:didSelectViewController:"
+         startingLineNumber = "413"
+         endingLineNumber = "413"
+         landmarkName = "-onImageLoadComplete"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -314,13 +286,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "IMGShare/AppDelegate.m"
-         timestampString = "358175215.079736"
+         filePath = "IMGShare/ScrollImageListViewController.m"
+         timestampString = "358271222.867928"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "191"
-         endingLineNumber = "191"
-         landmarkName = "-tabBarController:didSelectViewController:"
+         startingLineNumber = "169"
+         endingLineNumber = "169"
+         landmarkName = "-onImgBtPressed:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -328,13 +300,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "IMGShare/ScrollImageListExView.m"
-         timestampString = "358182164.180175"
+         filePath = "IMGShare/ScrollImageListViewController.m"
+         timestampString = "358271425.613297"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "302"
-         endingLineNumber = "302"
-         landmarkName = "-btPressed:"
+         startingLineNumber = "209"
+         endingLineNumber = "209"
+         landmarkName = "-imgBtPressed:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
