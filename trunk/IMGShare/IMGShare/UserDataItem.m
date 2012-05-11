@@ -105,6 +105,7 @@
     self.follow_me = nil;
     self.online_status = nil;
     self.bi_followers_count = nil;
+    [super dealloc];
 }
 
 

@@ -19,7 +19,7 @@
     bool    isActive;
     id      delegate;
     
-    bool    needResetList;
+    //bool    needResetList;
     
     NSDictionary* typeList;
     

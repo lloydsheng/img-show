@@ -230,6 +230,8 @@
                            params:(NSDictionary *)params
                      postDataType:(WBRequestPostDataType)postDataType
                  httpHeaderFields:(NSDictionary *)httpHeaderFields
+                  withRequestType:(WBRequestType) requestType
+                
 {
     // Step 1.
     // Check if the user has been logged in.
@@ -263,6 +265,7 @@
                                     httpHeaderFields:httpHeaderFields
                                             delegate:self];
 	
+    self.request.requestType = requestType;
 	[request connect];
 }
 
@@ -282,7 +285,8 @@
                              httpMethod:@"POST"
                                  params:params
                            postDataType:kWBRequestPostDataTypeMultipart
-                       httpHeaderFields:nil];
+                       httpHeaderFields:nil
+                        withRequestType:kWBRequestTypeRefresh];
     }
     else
     {
@@ -290,7 +294,8 @@
                              httpMethod:@"POST"
                                  params:params
                            postDataType:kWBRequestPostDataTypeNormal
-                       httpHeaderFields:nil];
+                       httpHeaderFields:nil
+                        withRequestType:kWBRequestTypeRefresh];
     }
 }
 
@@ -322,9 +327,9 @@
 
 - (void)request:(WBRequest *)request didFinishLoadingWithResult:(id)result
 {
-    if ([delegate respondsToSelector:@selector(engine:requestDidSucceedWithResult:)])
+    if ([delegate respondsToSelector:@selector(engine:requestDidSucceedWithResult:withRequest:)])
     {
-        [delegate engine:self requestDidSucceedWithResult:result];
+        [delegate engine:self requestDidSucceedWithResult:result withRequest:request];
     }
 }
 

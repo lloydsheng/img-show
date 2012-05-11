@@ -155,13 +155,27 @@
 
 - (void) hotBlogUpdateNotify:(NSNotification*) notify
 {
-    
+    NSDictionary* dic = notify.userInfo;
+    NSNumber* number = [dic objectForKey:@"requestType"];
+    if (number)
+    {
+        int requestType = [number intValue];
+        if (requestType == kWBRequestTypeRefresh)
+        {
+            [imageListView config];
+        }
+        else if(requestType == kWBRequestTypeNextPage)
+        {
+            [imageListView configNextPage];
+        }
+    }
 }
 
 - (void) dealloc
 {
     [imageListView release];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KHotBlogUpdateNotify object:nil];
+    [super dealloc];
 }
 
 - (void) onImgBtPressed:(id) sender

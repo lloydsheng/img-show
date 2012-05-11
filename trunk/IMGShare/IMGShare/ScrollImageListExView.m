@@ -91,6 +91,28 @@
         self.contentSize = CGSizeMake(self.frame.size.width, MAX(offset, self.frame.size.height));
     }
 
+    lastItemsCount = [imageDelegate GetItemsCount];
+}
+
+- (void) configNextPage
+{
+    for (int itemIndex = lastItemsCount; itemIndex < [imageDelegate GetItemsCount]; itemIndex++)
+    {
+        ColumnItemsList* list = [self getNextInitPosColumn];
+        if (list)
+        {
+            BlogDataItem* itemData = (BlogDataItem*)[imageDelegate GetImageItem:itemIndex];
+            [list initSubItem: itemData withIndex:itemIndex];
+        }
+    }
+    
+    int offset = [self getListHeight];//[[self getNextInitPosColumn] getEndPos].y;
+    if(offset !=0)
+    {
+        self.contentSize = CGSizeMake(self.frame.size.width, MAX(offset, self.frame.size.height));
+    }
+    
+    lastItemsCount = [imageDelegate GetItemsCount];
 }
 
 - (void) configImage:(ScrollImageItem*) scrollItem withIndex:(int) itemIndex withPos:(CGPoint) pos
