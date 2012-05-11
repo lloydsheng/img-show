@@ -46,7 +46,7 @@
 @synthesize postDataType;
 @synthesize httpHeaderFields;
 @synthesize delegate;
-
+@synthesize requestType;
 
 #pragma mark - WBRequest Life Circle
 
@@ -66,6 +66,12 @@
     [super dealloc];
 }
 
+-(id) init
+{
+    [super init];
+    requestType = kWBRequestTypeRefresh;
+    return self;
+}
 #pragma mark - WBRequest Private Methods
 
 + (NSString *)stringFromDictionary:(NSDictionary *)dict

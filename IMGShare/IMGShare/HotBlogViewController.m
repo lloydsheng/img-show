@@ -355,7 +355,7 @@
 {
     [curPopUser release], curPopUser = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KHotBlogUpdateNotify object:nil];
-
+    [super dealloc];
 }
 
 @end

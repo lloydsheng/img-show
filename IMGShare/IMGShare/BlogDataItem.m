@@ -94,7 +94,7 @@
     self.comments_count = nil;
         
     self.user = nil;
-        
+    [super dealloc];    
 
 }
 

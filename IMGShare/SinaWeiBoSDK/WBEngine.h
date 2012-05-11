@@ -51,7 +51,7 @@
 - (void)engineAuthorizeExpired:(WBEngine *)engine;
 
 - (void)engine:(WBEngine *)engine requestDidFailWithError:(NSError *)error;
-- (void)engine:(WBEngine *)engine requestDidSucceedWithResult:(id)result;
+- (void)engine:(WBEngine *)engine requestDidSucceedWithResult:(id)result withRequest:(WBRequest*) request;
 
 @end
 
@@ -120,7 +120,8 @@
                        httpMethod:(NSString *)httpMethod
                            params:(NSDictionary *)params
                      postDataType:(WBRequestPostDataType)postDataType
-                 httpHeaderFields:(NSDictionary *)httpHeaderFields;
+                 httpHeaderFields:(NSDictionary *)httpHeaderFields
+                  withRequestType:(WBRequestType) requestType;
 
 // Send a Weibo, to which you can attach an image.
 - (void)sendWeiBoWithText:(NSString *)text image:(UIImage *)image;

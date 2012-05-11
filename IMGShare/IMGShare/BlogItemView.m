@@ -138,6 +138,7 @@
     [blogPhoto release], blogPhoto = nil;
     [blogData release],blogData = nil;
     [btList release], btList = nil;
+    [super dealloc];
 }
 
 @end

@@ -191,6 +191,7 @@
     [topPageView release];
     [topScrollView release];
     [pageDataList release];
+    [super dealloc];
 }
 
 @end

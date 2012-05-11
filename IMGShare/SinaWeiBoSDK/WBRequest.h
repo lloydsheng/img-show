@@ -24,7 +24,12 @@ typedef enum
 	kWBRequestPostDataTypeMultipart,        // for uploading images and files.
 }WBRequestPostDataType;
 
-
+typedef enum
+{
+    kWBRequestTypeRefresh,
+    kWBRequestTypeNextPage,
+    KWbRequestTypeLast
+}WBRequestType;
 @class WBRequest;
 
 @protocol WBRequestDelegate <NSObject>
@@ -53,6 +58,8 @@ typedef enum
     NSMutableData           *responseData;
     
     id<WBRequestDelegate>   delegate;
+    
+    WBRequestType           requestType;
 }
 
 @property (nonatomic, retain) NSString *url;
@@ -61,6 +68,7 @@ typedef enum
 @property WBRequestPostDataType postDataType;
 @property (nonatomic, retain) NSDictionary *httpHeaderFields;
 @property (nonatomic, assign) id<WBRequestDelegate> delegate;
+@property (nonatomic, assign) WBRequestType requestType;
 
 + (WBRequest *)requestWithURL:(NSString *)url 
                    httpMethod:(NSString *)httpMethod 

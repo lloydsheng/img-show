@@ -39,8 +39,7 @@ const int kDefHotBlogNumPerPage = 50;
     self = [super init];
     if (self) {
         
-        needResetList = NO;
-       NSMutableArray* array  = [[NSMutableArray alloc] initWithCapacity:kDefHotBlogNumPerPage];
+        NSMutableArray* array  = [[NSMutableArray alloc] initWithCapacity:kDefHotBlogNumPerPage];
         self.hotBlogArray = array;
         [array release];
         
@@ -52,7 +51,7 @@ const int kDefHotBlogNumPerPage = 50;
         [wbEngine setRedirectURI:@"http://"];
         [wbEngine setIsUserExclusive:NO];
 
-        currentPageIndex = 1;
+        currentPageIndex = 0;
         isActive = NO;
         
         typeList = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"typelist" ofType:@"plist"]];
@@ -99,8 +98,8 @@ const int kDefHotBlogNumPerPage = 50;
     NSMutableDictionary* para = [[NSMutableDictionary alloc] initWithCapacity:3];
     [para setObject:@"1" forKey:@"type"];
     [para setObject:@"1" forKey:@"is_pic"];
-    [para setObject:@"100" forKey:@"count"];
-    [engine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil];
+    [para setObject:@"30" forKey:@"count"];
+    [engine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil withRequestType:kWBRequestTypeRefresh];
     isActive = YES;
     
     [para release];
@@ -135,10 +134,9 @@ const int kDefHotBlogNumPerPage = 50;
 - (void)engine:(WBEngine *)engine requestDidFailWithError:(NSError *)error
 {
     isActive = NO;
-    needResetList = NO;
 }
 
-- (void)engine:(WBEngine *)engine requestDidSucceedWithResult:(id)result
+- (void)engine:(WBEngine *)engine requestDidSucceedWithResult:(id)result withRequest:(WBRequest*) request
 {
     //    NSString *dataString = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
     //    id data = [dataString JSONValue];
@@ -154,9 +152,8 @@ const int kDefHotBlogNumPerPage = 50;
         }
         else if([statuses isKindOfClass:[NSArray class]])
         {
-            if (needResetList == YES) {
+            if (request.requestType == kWBRequestTypeRefresh) {
                 [hotBlogArray removeAllObjects];
-                needResetList = NO;
             }
             
             NSMutableArray* delList = [[NSMutableArray alloc] initWithCapacity:4];
@@ -178,7 +175,9 @@ const int kDefHotBlogNumPerPage = 50;
             [delList release];
             
             if (hotBlogArray.count > 0) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:KHotBlogUpdateNotify object:nil];
+                NSNumber* requestType = [NSNumber numberWithInt:request.requestType];
+                NSDictionary* dic = [NSDictionary dictionaryWithObject:requestType forKey:@"requestType"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KHotBlogUpdateNotify object:nil userInfo: dic];
                 currentPageIndex ++;
             }
 
@@ -193,7 +192,9 @@ const int kDefHotBlogNumPerPage = 50;
     NSMutableDictionary* para = [[NSMutableDictionary alloc] initWithCapacity:3];
     [para setObject:@"3" forKey:@"type"];
     [para setObject:@"1" forKey:@"is_pic"];
-    [para setObject:@"100" forKey:@"count"];
+    [para setObject:@"30" forKey:@"count"];
+    
+    WBRequestType type = requestType;
     
     if(requestType == KRequestNextPage)
     {
@@ -204,7 +205,7 @@ const int kDefHotBlogNumPerPage = 50;
     {
         currentPageIndex = 0;
     }
-    [wbEngine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil];
+    [wbEngine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil withRequestType:type];
     isActive = YES;
     [para release];
 }
@@ -215,6 +216,7 @@ const int kDefHotBlogNumPerPage = 50;
     [para setObject:typeCode forKey:@"type"];
     [para setObject:@"1" forKey:@"is_pic"];
     
+    WBRequestType type = requestType;
     if(requestType == KRequestNextPage)
     {
         [para setObject:[NSString stringWithFormat:@"%d", currentPageIndex + 1] forKey:@"page"];
@@ -223,9 +225,9 @@ const int kDefHotBlogNumPerPage = 50;
     else//kRequestRefresh
     {
         currentPageIndex = 0;
-        needResetList = YES;
+        //needResetList = YES;
     }
-    [wbEngine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil];
+    [wbEngine loadRequestWithMethodName:@"suggestions/statuses/hot.json" httpMethod:@"GET" params:para postDataType:kWBRequestPostDataTypeNone httpHeaderFields:nil withRequestType:type];
     isActive = YES;
     [para release];
 }
@@ -250,6 +252,7 @@ const int kDefHotBlogNumPerPage = 50;
 {
     self.hotBlogArray = nil;
     self.typeList = nil;
+    [super dealloc];
 }
 
 @end

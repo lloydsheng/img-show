@@ -666,7 +666,7 @@ static BOOL WBIsDeviceIPad()
 
 #pragma mark - WBEngineDelegate Methods
 
-- (void)engine:(WBEngine *)engine requestDidSucceedWithResult:(id)result
+- (void)engine:(WBEngine *)engine requestDidSucceedWithResult:(id)result withRequest:(WBRequest*) request
 {
     if ([delegate respondsToSelector:@selector(sendViewDidFinishSending:)])
     {

@@ -29,6 +29,8 @@
 
     UIImageView* imgDisplay;
     
+    int lastItemsCount;
+    
 }
 
 @property (nonatomic, assign) id imageDelegate;
@@ -40,5 +42,7 @@
 - (void) updateVisibleListWhenScroll2Up;
 
 - (void) config;
+
+- (void) configNextPage;
 
 @end
