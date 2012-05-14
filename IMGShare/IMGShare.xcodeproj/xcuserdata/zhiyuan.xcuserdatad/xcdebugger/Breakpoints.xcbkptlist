@@ -37,11 +37,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "IMGShare/HotBlogDataModel.m"
-         timestampString = "357469303.959301"
+         timestampString = "358693388.822581"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "99"
-         endingLineNumber = "99"
+         startingLineNumber = "100"
+         endingLineNumber = "100"
          landmarkName = "-engineDidLogIn:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -65,11 +65,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "IMGShare/HotBlogViewController.m"
-         timestampString = "355555969.387137"
+         timestampString = "358701765.725045"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "157"
-         endingLineNumber = "157"
+         startingLineNumber = "162"
+         endingLineNumber = "162"
          landmarkName = "-tableView:willSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -93,11 +93,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "IMGShare/HotBlogDataModel.m"
-         timestampString = "357469444.04303"
+         timestampString = "358693388.822581"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "214"
-         endingLineNumber = "214"
+         startingLineNumber = "215"
+         endingLineNumber = "215"
          landmarkName = "-requestData:withRequestType:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -265,20 +265,6 @@
          startingLineNumber = "413"
          endingLineNumber = "413"
          landmarkName = "-onImageLoadComplete"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "IMGShare/ScrollImageListViewController.m"
-         timestampString = "358353765.23982"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "208"
-         endingLineNumber = "208"
-         landmarkName = "-onImgBtPressed:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

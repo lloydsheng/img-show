@@ -113,6 +113,7 @@
     }
     
     lastItemsCount = [imageDelegate GetItemsCount];
+    [self setNeedsDisplay];
 }
 
 - (void) configImage:(ScrollImageItem*) scrollItem withIndex:(int) itemIndex withPos:(CGPoint) pos

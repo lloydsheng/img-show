@@ -52,6 +52,7 @@
     [imageListView config];
     [self.view addSubview:imageListView];
     lastOffsetY = 0;
+    [self.view setBackgroundColor:[UIColor whiteColor]];
     
 //    CGRect rect = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 60);//应可以用属性设置
 //    list = [[ScrollImageListExView alloc] initWithFrame:rect withColumn:kGridItemCountEachRow];
@@ -186,20 +187,28 @@
     if (index < [self GetItemsCount])
     {
         BlogDataItem* itemData = (BlogDataItem*)[self GetImageItem:index];
-        if (imgDisplay == nil) 
+        if (fullImgDisplay == nil) 
         {
+            fullImgDisplay = [[UIView alloc] initWithFrame:self.view.frame];
+            fullImgDisplay.alpha = 0;
             imgDisplay = [[UIImageView alloc] init];
-            [self.view addSubview:imgDisplay];
+            [fullImgDisplay addSubview:imgDisplay];
             
             imgBt = [UIButton buttonWithType:UIButtonTypeCustom];
             [imgBt addTarget:self action:@selector(imgBtPressed:) forControlEvents:UIControlEventTouchUpInside];
             imgBt.tag = 10;
-            [self.view addSubview:imgBt];
+            [fullImgDisplay addSubview:imgBt];
+            
+            [self.view addSubview:fullImgDisplay];
         }
-        imgDisplay.hidden = NO;
+        else
+        {
+            fullImgDisplay.frame = self.view.frame;
+        }
+        
         NSString* imgUrl = [UtilsModel GetFullBlogUrlStr:itemData.pic_pid withImgType:EImageMiddle];
         [imgDisplay setImageWithURL:[NSURL URLWithString:imgUrl]];
-        //imgDisplay.frame = view.frame;
+        
         imgDisplay.frame = [view convertRect:view.bounds toView:self.view];
         
         [UIView beginAnimations:nil context:nil];
@@ -209,18 +218,20 @@
         int height = [itemData.pic_pheight intValue];
         float rateW = width * 1.0 / self.view.frame.size.width;
         float rateH = height * 1.0 / self.view.frame.size.height;
-        
+        fullImgDisplay.alpha = 0.9;
         if (rateH > 1 || rateW > 1)
         {
             width = width / MAX(rateH, rateW);
             height = height / MAX(rateH, rateW);
         }
         imgDisplay.frame = CGRectMake(0, 0, width, height);
-        imgDisplay.center = self.view.center;
         
         [UIView commitAnimations];
+        [fullImgDisplay setBackgroundColor:[UIColor darkGrayColor]];
+
+        imgDisplay.center = self.view.center;
+        
         imgBt.frame = imgDisplay.frame;
-        //[self.view bringSubviewToFront:imgBt];
         
     }
 
@@ -228,6 +239,8 @@
 
 - (void) imgBtPressed:(id) sender
 {
+    [fullImgDisplay setBackgroundColor:[UIColor clearColor]];
+    
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.5];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
@@ -235,8 +248,9 @@
     [UIView commitAnimations];
     
     imgBt.frame = imgDisplay.frame;
-    imgDisplay.image = nil;
-    imgDisplay.hidden = YES;
+    fullImgDisplay.frame = CGRectMake(0, 0, 0, 0);
+    //imgDisplay.image = nil;
+    //imgDisplay.hidden = YES;
     
 }
 

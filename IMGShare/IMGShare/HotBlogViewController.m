@@ -75,13 +75,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.view.superview bringSubviewToFront:curPopUser]; 
+    
+    if (curPopUser.superview == nil && offsetStatus != ETableNotInit)
+    {
+        [self.view.superview addSubview:curPopUser];
 
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    curPopUser.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, KUserItemHeight);
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -221,6 +226,7 @@
     if (ETableNotInit == offsetStatus)
     { 
         [self.view.superview addSubview:curPopUser];
+        UIView* view = curPopUser.superview;
 
         [self.view.superview bringSubviewToFront:curPopUser]; 
 
@@ -354,6 +360,7 @@
 - (void) dealloc
 {
     [curPopUser release], curPopUser = nil;
+    [oldPopUser release], oldPopUser = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KHotBlogUpdateNotify object:nil];
     [super dealloc];
 }

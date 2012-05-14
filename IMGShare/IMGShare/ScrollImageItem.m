@@ -30,9 +30,9 @@ const int kImageWaitTag = 100;
     if (wait == nil) {
         wait = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
         wait.tag = kImageWaitTag;
-        wait.center = self.center;
         [self addSubview:wait];
     }
+    wait.center = self.center;
     [wait startAnimating];
     
 }
