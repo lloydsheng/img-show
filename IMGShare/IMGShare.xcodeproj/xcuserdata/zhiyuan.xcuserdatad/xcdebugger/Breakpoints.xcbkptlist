@@ -206,20 +206,6 @@
          timestampString = "356758818.700488"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "623"
-         endingLineNumber = "623"
-         landmarkName = "-updateVisibleListWhenScroll2Down"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "IMGShare/ScrollImageListView.m"
-         timestampString = "356758818.700488"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
          startingLineNumber = "105"
          endingLineNumber = "105"
          landmarkName = "-configImage:withIndex:"
@@ -287,26 +273,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "IMGShare/ScrollImageListViewController.m"
-         timestampString = "358271222.867928"
+         timestampString = "358353765.23982"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "169"
-         endingLineNumber = "169"
+         startingLineNumber = "208"
+         endingLineNumber = "208"
          landmarkName = "-onImgBtPressed:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "IMGShare/ScrollImageListViewController.m"
-         timestampString = "358271425.613297"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "209"
-         endingLineNumber = "209"
-         landmarkName = "-imgBtPressed:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

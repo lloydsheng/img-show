@@ -199,19 +199,28 @@
         imgDisplay.hidden = NO;
         NSString* imgUrl = [UtilsModel GetFullBlogUrlStr:itemData.pic_pid withImgType:EImageMiddle];
         [imgDisplay setImageWithURL:[NSURL URLWithString:imgUrl]];
-        imgDisplay.frame = view.frame;//CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);        
+        //imgDisplay.frame = view.frame;
+        imgDisplay.frame = [view convertRect:view.bounds toView:self.view];
+        
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.5];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         int width = [itemData.pic_pwidth intValue];
         int height = [itemData.pic_pheight intValue];
+        float rateW = width * 1.0 / self.view.frame.size.width;
+        float rateH = height * 1.0 / self.view.frame.size.height;
+        
+        if (rateH > 1 || rateW > 1)
+        {
+            width = width / MAX(rateH, rateW);
+            height = height / MAX(rateH, rateW);
+        }
         imgDisplay.frame = CGRectMake(0, 0, width, height);
         imgDisplay.center = self.view.center;
         
         [UIView commitAnimations];
-        
         imgBt.frame = imgDisplay.frame;
-        [self.view bringSubviewToFront:imgBt];
+        //[self.view bringSubviewToFront:imgBt];
         
     }
 
