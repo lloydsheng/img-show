@@ -35,10 +35,10 @@
 @property (nonatomic, assign) int endIndex;
 
 - (id) init:(id) delegate withWidth:(int) columnWid offset:(int) posX;
-- (void) initSubItem:(BlogDataItem*) dataItem withIndex:(int) index;
-- (void) configItem:(BlogDataItem*) dataItem withIndex:(int) index;
-- (void) configNextItem:(BlogDataItem*) dataItem;
-- (void) configPreItem:(BlogDataItem*) dataItem;
+- (void) initSubItem:(BlogDataItem*) dataItem withIndex:(int) allListindex;
+- (void) configItem:(BlogDataItem*) dataItem withIndex:(int) allListindex;
+- (void) configNextItem:(BlogDataItem*) dataItem withIndex:(int) allListindex;
+- (void) configPreItem:(BlogDataItem*) dataItem withIndex:(int) allListindex; 
 //- (void) configItemBefore:(BlogDataItem*) dataItem withIndex:(int) index;
 - (void) releaseItem:(int) index;
 - (void) releaseFirstItem;

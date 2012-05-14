@@ -90,7 +90,7 @@
     }
 }
 
-- (void) configNextItem:(BlogDataItem*) dataItem
+- (void) configNextItem:(BlogDataItem*) dataItem withIndex:(int) allListindex
 {
     if(endIndex + 1 < itemsList.count)
     {
@@ -104,7 +104,7 @@
             imageItem.frame = CGRectMake(pos.x, pos.y, columnWidth, columnHeight);
             
             NSString* url = [UtilsModel GetFullBlogUrlStr:dataItem.pic_pid withImgType:EImageThumb];
-            [imageItem config:url withIndex:endIndex];
+            [imageItem config:url withIndex:allListindex];
             [imageItem setBackgroundColor:[UIColor blueColor]];
             [item configItem:imageItem];
                
@@ -112,7 +112,7 @@
     }
 }
 
-- (void) configPreItem:(BlogDataItem*) dataItem
+- (void) configPreItem:(BlogDataItem*) dataItem withIndex:(int) allListindex
 {
     if(startIndex > 0)
     {
@@ -126,7 +126,7 @@
             imageItem.frame = CGRectMake(pos.x, pos.y - columnHeight, columnWidth, columnHeight);
             
             NSString* url = [UtilsModel GetFullBlogUrlStr:dataItem.pic_pid withImgType:EImageThumb];
-            [imageItem config:url withIndex:endIndex];
+            [imageItem config:url withIndex:allListindex];
             [imageItem setBackgroundColor:[UIColor blueColor]];
             [item configItem:imageItem];
             
@@ -346,7 +346,7 @@
             
             BlogDataItem* data = [delegate getSubDataItem:dataIndex];
             //[self configItemBefore:data withIndex:dataIndex];
-            [self configPreItem:data];
+            [self configPreItem:data withIndex:dataIndex];
         }
         else {
             break;
@@ -385,7 +385,7 @@
             }
             BlogDataItem* data = [delegate getSubDataItem:dataIndex];
 //            [self configItem:data withIndex:dataIndex];
-            [self configNextItem:data];
+            [self configNextItem:data withIndex:dataIndex];
         }
         else {
             break;
