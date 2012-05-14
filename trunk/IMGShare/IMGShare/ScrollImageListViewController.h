@@ -20,6 +20,8 @@
     ScrollImageListExView*   imageListView;
     UIImageView* imgDisplay;
     UIButton*    imgBt;
+    
+    UIView*      fullImgDisplay;
 }
 
 @end
