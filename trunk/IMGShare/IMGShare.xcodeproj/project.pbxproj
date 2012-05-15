@@ -137,6 +137,14 @@
 		D7B21812155A377A000D3D62 /* ImageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D7B2180F155A3779000D3D62 /* ImageScrollView.m */; };
 		D7B7EC2D153167F800BF7B4C /* cell_profile_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B7EC2C153167F800BF7B4C /* cell_profile_bg.png */; };
 		D7C4BCAE1539383F00477671 /* SelfGridItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D7C4BCAD1539383F00477671 /* SelfGridItem.m */; };
+		D7F7289615628B2C0022755D /* CKImageMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = D7F7289315628B2C0022755D /* CKImageMetadata.m */; };
+		D7F7289715628B2C0022755D /* CKImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7F7289515628B2C0022755D /* CKImagePickerController.m */; };
+		D7F7289A15628B7F0022755D /* CKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7F7289915628B7F0022755D /* CKViewController.m */; };
+		D7F728A51562996C0022755D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7F728A41562996C0022755D /* MobileCoreServices.framework */; };
+		D7F728A7156299E60022755D /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7F728A6156299E60022755D /* AssetsLibrary.framework */; };
+		D7F728A9156299F30022755D /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7F728A8156299F30022755D /* ImageIO.framework */; };
+		D7F728AB15629A000022755D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7F728AA15629A000022755D /* CoreLocation.framework */; };
+		D7F728AE15629BD80022755D /* UIImage+EXIF.m in Sources */ = {isa = PBXBuildFile; fileRef = D7F728AD15629BD80022755D /* UIImage+EXIF.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -362,6 +370,19 @@
 		D7B7EC2C153167F800BF7B4C /* cell_profile_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_profile_bg.png; sourceTree = "<group>"; };
 		D7C4BCAC1539383F00477671 /* SelfGridItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfGridItem.h; sourceTree = "<group>"; };
 		D7C4BCAD1539383F00477671 /* SelfGridItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfGridItem.m; sourceTree = "<group>"; };
+		D7F7289115628B2C0022755D /* CKCameraKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCameraKit.h; sourceTree = "<group>"; };
+		D7F7289215628B2C0022755D /* CKImageMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKImageMetadata.h; sourceTree = "<group>"; };
+		D7F7289315628B2C0022755D /* CKImageMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageMetadata.m; sourceTree = "<group>"; };
+		D7F7289415628B2C0022755D /* CKImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKImagePickerController.h; sourceTree = "<group>"; };
+		D7F7289515628B2C0022755D /* CKImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImagePickerController.m; sourceTree = "<group>"; };
+		D7F7289815628B7F0022755D /* CKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKViewController.h; sourceTree = "<group>"; };
+		D7F7289915628B7F0022755D /* CKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKViewController.m; sourceTree = "<group>"; };
+		D7F728A41562996C0022755D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		D7F728A6156299E60022755D /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		D7F728A8156299F30022755D /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		D7F728AA15629A000022755D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D7F728AC15629BD80022755D /* UIImage+EXIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EXIF.h"; sourceTree = "<group>"; };
+		D7F728AD15629BD80022755D /* UIImage+EXIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+EXIF.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -369,6 +390,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7F728AB15629A000022755D /* CoreLocation.framework in Frameworks */,
+				D7F728A9156299F30022755D /* ImageIO.framework in Frameworks */,
+				D7F728A7156299E60022755D /* AssetsLibrary.framework in Frameworks */,
+				D7F728A51562996C0022755D /* MobileCoreServices.framework in Frameworks */,
 				D78F53C6152DA9C400A3343B /* MapKit.framework in Frameworks */,
 				D78F53C4152DA96500A3343B /* QuartzCore.framework in Frameworks */,
 				D78F538F152DA55300A3343B /* Security.framework in Frameworks */,
@@ -414,6 +439,10 @@
 		D78F5251152D8BF100A3343B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D7F728AA15629A000022755D /* CoreLocation.framework */,
+				D7F728A8156299F30022755D /* ImageIO.framework */,
+				D7F728A6156299E60022755D /* AssetsLibrary.framework */,
+				D7F728A41562996C0022755D /* MobileCoreServices.framework */,
 				D78F53C5152DA9C400A3343B /* MapKit.framework */,
 				D78F53C3152DA96500A3343B /* QuartzCore.framework */,
 				D78F538E152DA55300A3343B /* Security.framework */,
@@ -428,6 +457,7 @@
 		D78F5258152D8BF100A3343B /* IMGShare */ = {
 			isa = PBXGroup;
 			children = (
+				D7F7289015628A510022755D /* Camera */,
 				D78F5366152DA4A700A3343B /* Utils */,
 				D78F5365152DA49300A3343B /* DataModel */,
 				D78F5287152D96C200A3343B /* Image */,
@@ -476,6 +506,8 @@
 				D7A3CEC5155ABE76000B5FF0 /* ScrollImage */,
 				D7A3CED9155AC159000B5FF0 /* EGOPhotoCaptionView.h */,
 				D7A3CEDA155AC15A000B5FF0 /* EGOPhotoCaptionView.m */,
+				D7F7289815628B7F0022755D /* CKViewController.h */,
+				D7F7289915628B7F0022755D /* CKViewController.m */,
 				D7B2180E155A3779000D3D62 /* ImageScrollView.h */,
 				D7B2180F155A3779000D3D62 /* ImageScrollView.m */,
 				D78F5390152DA7B600A3343B /* EGORefreshTableHeaderView.m */,
@@ -811,6 +843,20 @@
 			name = ImageModel;
 			sourceTree = "<group>";
 		};
+		D7F7289015628A510022755D /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				D7F728AC15629BD80022755D /* UIImage+EXIF.h */,
+				D7F728AD15629BD80022755D /* UIImage+EXIF.m */,
+				D7F7289115628B2C0022755D /* CKCameraKit.h */,
+				D7F7289215628B2C0022755D /* CKImageMetadata.h */,
+				D7F7289315628B2C0022755D /* CKImageMetadata.m */,
+				D7F7289415628B2C0022755D /* CKImagePickerController.h */,
+				D7F7289515628B2C0022755D /* CKImagePickerController.m */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1052,6 +1098,10 @@
 				D7A3CEDB155AC15A000B5FF0 /* EGOPhotoCaptionView.m in Sources */,
 				D7A3CEE0155AC21B000B5FF0 /* EGOQuickPhoto.m in Sources */,
 				D7A3CEE1155AC21B000B5FF0 /* EGOQuickPhotoSource.m in Sources */,
+				D7F7289615628B2C0022755D /* CKImageMetadata.m in Sources */,
+				D7F7289715628B2C0022755D /* CKImagePickerController.m in Sources */,
+				D7F7289A15628B7F0022755D /* CKViewController.m in Sources */,
+				D7F728AE15629BD80022755D /* UIImage+EXIF.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
