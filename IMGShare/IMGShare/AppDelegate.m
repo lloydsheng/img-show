@@ -11,6 +11,7 @@
 #import "HotBlogDataModel.h"
 #import "HomePageViewController.h"
 #import "ScrollImageListViewController.h"
+#import "CKViewController.h"
 
 @interface AppDelegate (Private)
 
@@ -109,11 +110,11 @@
 {
     tabBarController = [[UITabBarController alloc] init];
     tabBarController.delegate = self;
-    HomePageViewController* viewC = [[HomePageViewController alloc] init];
-    
+    //HomePageViewController* viewC = [[HomePageViewController alloc] init];
+    CKViewController* viewCamera = [[CKViewController alloc] init];
     //viewC.view = [[[UIView alloc] initWithFrame:rootController.view.bounds] autorelease];
     //[viewC.view setBackgroundColor:[UIColor blueColor]];
-    viewC.tabBarItem = [[ UITabBarItem alloc] initWithTitle:@"主页" image:[UIImage imageNamed: @"heart.png"] tag:0];
+    viewCamera.tabBarItem = [[ UITabBarItem alloc] initWithTitle:@"主页" image:[UIImage imageNamed: @"heart.png"] tag:0];
     
     ScrollImageListViewController* viewC2 = [[ScrollImageListViewController alloc] init];
     //viewC2.view = [[[UIView alloc] initWithFrame:rootController.view.bounds] autorelease];
@@ -124,14 +125,15 @@
 //    hotBlogController.view = [[[UITableView alloc] initWithFrame:rootController.view.bounds] autorelease];
     hotBlogController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"MM" image:[UIImage imageNamed:@"heart.png"] tag:2];
 
-    NSArray* viewList = [[NSArray alloc] initWithObjects:hotBlogController, viewC, viewC2, nil];
+    NSArray* viewList = [[NSArray alloc] initWithObjects:hotBlogController, viewCamera, viewC2, nil];
     tabBarController.viewControllers = viewList;
     tabBarController.view.frame = CGRectMake(0, 0, rootController.view.bounds.size.width, rootController.view.bounds.size.height);
     [rootController.view addSubview:tabBarController.view];
     
     lastIndex = 0;
     
-    [viewC release];
+    [viewCamera release];
+    //[viewC release];
     [viewC2 release];
     [viewList release];
 
